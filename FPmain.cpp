@@ -15,10 +15,8 @@ int findCommand(char *command){
 }
 
 int main(int argc, char **argv){
-	
-	// t2 = time(NULL);
-	// printf("The reading time is %0d:%0d (min:sec)\n", (t2-t1)/60, (t2-t1)%60);
-
+	Customer* USER_NOW = NULL;
+	int TIME_CNT = 0; /* for history */
 	char command[10];
 
 	while(1){
@@ -32,7 +30,7 @@ int main(int argc, char **argv){
 		}*/ /* additional feature */
 		switch(findCommand(command)){
             case LOGIN:
-            	processLogin();
+            	processLogin(USER_NOW);
                 break;
             case CREATE:
             	processCreate();

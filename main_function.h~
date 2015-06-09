@@ -12,7 +12,7 @@
 #include <algorithm>
 
 template <class H>
-class Costumer{
+class Customer{
 private:
 	string encoded_password;
 	int deposit;
@@ -20,12 +20,12 @@ private:
 
 public:
 	string ID;
-	Costumer(string idendity,string raw_password){//constructor;
+	Customer(string idendity,string raw_password){//constructor;
 		ID  = idendity;
 		encoded_password = encode(raw_password); //encode is ALO's encoding function;
 		deposit = 0;
 	};
-	~Costumer(){
+	~Customer(){
 		delete ID;
 		delete encoded_password;
 		delete history;
@@ -35,6 +35,7 @@ public:
 	};
 	void Deposit(int money){
 		deposit += money;
+		history.add(1,money);//not sure
 		return;
 	}
 	void withdraw(int money){
@@ -44,7 +45,13 @@ public:
 			deposit -= money;
 			cout << "sucess, " <<'[' << deposit << ']' <<" dollors left in current account";
 		}
-		
+		history.add(2,money);//not sure
+		return;
 	}
-	
-}
+	void merge(Customer id2){
+		deposit += id2.deposit;
+		history.merge(id2.history);
+		delete id2; 
+		return;
+	}
+};
