@@ -33,7 +33,7 @@ void processDelete(/* no argument */){
 		cout <<"success"<< endl;
 	}
 	if(success)
-		user_now = tmp;
+		delete *tmp;
 	return;
 }
 void processMerge();

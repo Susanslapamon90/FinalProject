@@ -19,7 +19,7 @@ void processLogin(Customer* user_now){
 	return;
 }
 void processCreate();
-void processDelete(){
+void processDelete(/* no argument */){
 	bool success = false;
 	string ID, PW;
 	cin >> ID >> PW;
@@ -33,7 +33,7 @@ void processDelete(){
 		cout <<"success"<< endl;
 	}
 	if(success)
-		user_now = tmp;
+		delete *tmp;
 	return;
 }
 void processMerge();
