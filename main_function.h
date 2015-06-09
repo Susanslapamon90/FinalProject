@@ -35,13 +35,13 @@ public:
 			deposit -= money;
 			cout << "sucess, " <<'[' << deposit << ']' <<" dollors left in current account";
 		}
-		history.add(2,money);
+		history.add(2,money);//not sure
 		return;
 	}
 	void merge(Costumer id2){
 		deposit += id2.deposit;
 		history.merge(id2.history);
-		delete id2;
+		delete id2; 
 		return;
 	}
 };
