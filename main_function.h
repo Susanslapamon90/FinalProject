@@ -54,4 +54,6 @@ public:
 		delete id2; 
 		return;
 	}
+	void transfer(Customer target){ // require Alo's transfer function
+	}
 };
