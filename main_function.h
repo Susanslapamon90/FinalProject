@@ -10,7 +10,24 @@
 #include <set>
 #include <list>
 #include <algorithm>
-
+#include <set>
+class INDEX{
+	public:
+	string id;
+	Customer *cu_ptr;
+	bool operator < (const INDEX &a){return id > a.id;};
+	bool operator == (const INDEX &a){return id == a.id;}
+	bool operator == (const string &a){return a == id;}
+	/*constructor & destructor*/
+	INDEX(string st, Customer ptr){
+		id = st;
+		cu_ptr = &ptr;};
+	~INDEX(){
+		id.clear();
+	}
+	//yet completed
+}
+ 
 template <class H>
 class Customer{
 private:

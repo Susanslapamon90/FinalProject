@@ -17,37 +17,32 @@ int main(int argc, char **argv){
 	Customer* USER_NOW = NULL;
 	int TIME_CNT = 0; /* for history */
 	char command[10];
-
+	Set<INDEX> idset;
+	
 	while(1){
 		scanf("%s", command);
-		/*if(strcmp(command, "exit") == 0
-		 ||strcmp(command, "quit") == 0
-		 ||strcmp(command, "bye") == 0
-		 ||strcmp(command, "close") == 0){
-			cout << "See you next time! Bye~" << endl;
-			return 0;
-		}*/ /* additional feature */
+		
 		switch(findCommand(command)){
             		case LOGIN:
             			processLogin(USER_NOW);
                 		break;
             		case CREATE:
-            			processCreate();
+            			processCreate(idset);
                 		break;
             		case DELETE:
-                		processDelete();
+                		processDelete(idset);
                 		break;
             		case MERGE:
-				processMerge();
+						processMerge();
                 		break;
             		case DEPOSIT:
                 		processDeposit(USER_NOW);
-				break;
-			case WITHDRAW:
+						break;
+					case WITHDRAW:
             			processWithdraw(USER_NOW);
                 		break;
             		case TRANSFER:
-            			processTransfer(USER_NOW);
+            			processTransfer(USER_NOW,TIME_CNT);
                 		break;
             		case FIND:
             			processFind(USER_NOW);
