@@ -5,32 +5,55 @@
 #include <string>
 #include <vector>
 using namespace std;
-#define MAX 100000
+#define MAX 100
 
 enum prcsmode {CHR, QMK, STAR}
 
 void processFind(string test, vector<string>& ID){
-	int mode = 0;
+	int mode = -1;
 	vector<string>::iterator vi;
 	if(test.find("*") == string::npos && test.find("?") == string::npos){
 		for(vi = ID.begin(); vi != ID.end(); vi++){
 			if(test == *vi)
-				cout << *vi << endl;
+				cout << *vi << endsl;
 		}
 	}
-
+	vector<string> fragment;
 	string current;
-	/*??? head[];
-	??? tail;*/
-	/*for(int i = 0; i < test.size(), i++){
+	size_t bottom; // top, bottom not always exist
+	bool top_exist = true, bottom_exist = true;
+	int D[MAX-1];
+	// process the search string
+	if(test[0] == '*')
+		top_exist = false; 
+	for(int i = 0; i < test.size(), i++){
 		if(test[i] == '*'){
+			if(mode == -1){
+				mode = STAR;
+				continue;
+			}
 			mode = STAR;
-			continue;
-		}else if(test[i] == '?')
+			fragment.push_back(current);
+			current.clear();
+			D[fragment.size()-1] = -1;
+		}else if(test[i] == '?'){
+			if(mode == CHR){
+				fragment.push_back(current);
+				current.clear();
+				D[fragment.size()-1] = 1;
+			}else
+				D[fragment.size()-1]++;
 			mode = QMK;
-		else
+		}else {
 			current += test[i];
-	}*/
+			mode = CHR;
+		}
+	}
+	if(test[test.size()-1] == '*')
+		bottom_exist = false; 
+	
+	// go through our ID
+	
 }
 
 int main(int argc, char** argv){
