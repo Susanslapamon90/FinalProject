@@ -71,6 +71,14 @@ public:
 		delete id2; 
 		return;
 	}
-	void transfer(Customer target){ // require Alo's transfer function
+	void transfer(Customer *target, int tsf_money){ // require Alo's transfer function
+		if(tsf_money > deposit)
+			printf("fail, [%d] dollars only in current account\n", deposit);
+		else{
+			deposit -= tsf_money;
+			target->deposit += tsf_money;
+			printf("success, [%d] dollars left in current account\n", deposit);
+		}
+		return;
 	}
 };
