@@ -5,13 +5,12 @@
 #include <string>
 #include <vector>
 using namespace std;
-//using namespace string;
 #define MAX 100000
 
+enum prcsmode {CHR, QMK, STAR}
+
 void processFind(string test, vector<string>& ID){
-	bool all_sure = false;
-	bool star_mode = false;
-	bool qmk_mode = false;
+	int mode = 0;
 	vector<string>::iterator vi;
 	if(test.find("*") == string::npos && test.find("?") == string::npos){
 		for(vi = ID.begin(); vi != ID.end(); vi++){
@@ -20,20 +19,23 @@ void processFind(string test, vector<string>& ID){
 		}
 	}
 
+	string current;
+	/*??? head[];
+	??? tail;*/
 	/*for(int i = 0; i < test.size(), i++){
 		if(test[i] == '*'){
-			star_mode = true;
+			mode = STAR;
 			continue;
 		}else if(test[i] == '?')
-			qmk_mode = true;
+			mode = QMK;
 		else
-
+			current += test[i];
 	}*/
 }
 
 int main(int argc, char** argv){
 	vector<string> ID;
-	ifstream fp (argv[1]);
+	ifstream fp(argv[1]);
 	string *tmp = new string;
 	while(getline(fp, *tmp))
 		ID.push_back(*tmp);
@@ -48,11 +50,10 @@ int main(int argc, char** argv){
 	cout << " // * : any number(in Domain or 0) of charaters that can be any of {0~9, A~Z, a~z}" << endl;
 	cout << " // it is invalid to type such as **, *?, ?* " << endl;
 
-
-	cout << "$Type something to search : ";
-	while(1){
-		string *tmp = new string;
-		cin >> *tmp;
+	cout << " $Type something to search : ";
+	char cstr[100];
+	while(scanf("%s", cstr) != EOF){
+		string *tmp = new string(cstr);
 		if(tmp->size() == 0){
 			cout << " #please type something" << endl;			
 		}
@@ -64,8 +65,9 @@ int main(int argc, char** argv){
 				}
 			}
 			if((*tmp)[i] == '*' && i > 0){
-				if((*tmp)[i-1] == '*' || (*tmp)[i-1] == '?')
+				if((*tmp)[i-1] == '*' || (*tmp)[i-1] == '?'){
 					cout << " #there's invalid combination : " << (*tmp)[i-1] << (*tmp)[i] << endl;
+				}
 			}
 			if((*tmp)[i] == '?' && i > 0 && (*tmp)[i-1] == '*')
 				cout << " #there's invalid combination : " << (*tmp)[i-1] << (*tmp)[i] << endl;
