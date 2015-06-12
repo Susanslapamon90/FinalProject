@@ -1,15 +1,14 @@
-#include "main_function.h"
 #include "process.h"
 using namespace std;
 
 enum commandList {LOGIN, CREATE, DELETE, MERGE, 
-				DEPOSIT, WITHDRAW, TRANSFER, FIND, SEARCH};
+		  DEPOSIT, WITHDRAW, TRANSFER, FIND, SEARCH};
 int findCommand(char *command){
 	char *commandString[9] = {"login", "create", "delete", "merge", 
-							"deposit", "withdraw", "transfer", "find", "search"};
-    int i;
-    for(i = 0; i < 9; i++)
-        if(strcmp(command, commandString[i]) == 0)
+		"deposit", "withdraw", "transfer", "find", "search"};
+	int i;
+	for(i = 0; i < 9; i++)
+        	if(strcmp(command, commandString[i]) == 0)
             return i;
     exit(-1);
 }
@@ -29,35 +28,34 @@ int main(int argc, char **argv){
 			return 0;
 		}*/ /* additional feature */
 		switch(findCommand(command)){
-            case LOGIN:
-            	processLogin(USER_NOW);
-                break;
-            case CREATE:
-            	processCreate();
-                break;
-            case DELETE:
-                processDelete();
-                break;
-            case MERGE:
-            	processMerge();
-                break;
-            case DEPOSIT:
-                processDeposit();
+            		case LOGIN:
+            			processLogin(USER_NOW);
+                		break;
+            		case CREATE:
+            			processCreate();
+                		break;
+            		case DELETE:
+                		processDelete();
+                		break;
+            		case MERGE:
+				processMerge();
+                		break;
+            		case DEPOSIT:
+                		processDeposit(USER_NOW);
 				break;
 			case WITHDRAW:
-            	processWithdraw();
-                break;
-            case TRANSFER:
-            	processTransfer();
-                break;
-            case FIND:
-            	processFind();
-                break;
-            case SEARCH:
-            	processSearch();
-                break;
-        }
+            			processWithdraw(USER_NOW);
+                		break;
+            		case TRANSFER:
+            			processTransfer(USER_NOW);
+                		break;
+            		case FIND:
+            			processFind(USER_NOW);
+                		break;
+            		case SEARCH:
+            			processSearch(USER_NOW);
+                		break;
+        	}
 	}
-
 	return 0;
 }

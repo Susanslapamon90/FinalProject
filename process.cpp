@@ -18,7 +18,15 @@ void processLogin(Customer* user_now){
 		user_now = tmp;
 	return;
 }
-void processCreate();
+void processCreate(){
+	string ID,password;
+	cin >> ID >> password;
+	if(find(ID) == NULL){
+		Customer *now = new Customer(ID,password);
+	// others require the DS of our ID web;	
+	}
+
+}
 void processDelete(/* no argument */){
 	bool success = false;
 	string ID, PW;
@@ -37,8 +45,8 @@ void processDelete(/* no argument */){
 	return;
 }
 void processMerge();
-void processDeposit();
-void processWithdraw();
-void processTransfer();
-void processFind();
-void processSearch();
+void processDeposit(Customer* user_now)
+void processWithdraw(Customer* user_now)
+void processTransfer(Customer* user_now)
+void processFind(Customer* user_now);
+void processSearch(Customer* user_now);
