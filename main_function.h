@@ -11,6 +11,16 @@
 #include <list>
 #include <algorithm>
 #include <set>
+#define TO 0
+#define FROM 1
+
+struct transferhistory{
+	bool tofrom;
+	string id;
+	int money;
+}; 
+typedef struct transferhistory THistory;
+
 class INDEX{
 	public:
 	string id;
@@ -26,7 +36,7 @@ class INDEX{
 		id.clear();
 	}
 	//yet completed
-}
+};
  
 template <class H>
 class Customer{
@@ -77,6 +87,15 @@ public:
 		else{
 			deposit -= tsf_money;
 			target->deposit += tsf_money;
+			
+			THistory tmp;
+			tmp.money = tsf_money;
+			tmp.id = ID;
+			tmp.tofrom = TO;
+			history.push_back(tmp);
+			tmp.id = target->ID;
+			tmp.tofrom = FROM;
+			target->history.push_back(tmp);
 			printf("success, [%d] dollars left in current account\n", deposit);
 		}
 		return;
