@@ -91,7 +91,7 @@ public:
 		vector<THistory *>::iterator i;
 		for(i = id2.history.begin(); i != id2.history.end(); i++){
 			(*i)->bro->id = ID;
-			(*i)->bro->bro = NULL;
+			(*i)->bro->bro = this;
 			delete (*i);
 		}
 		//history.merge(id2.history);/*I want to use stl merge*/
