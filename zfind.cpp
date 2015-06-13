@@ -53,7 +53,55 @@ void processFind(string test, vector<string>& ID){
 		bottom_exist = false; 
 	
 	// go through our ID
-	
+	vector<string>::iterator fi;
+	int count = 0;
+	for(vi = ID.begin(); vi != ID.end(); vi++){
+		bool can_print = true;
+		for(fi = fragment.begin(), count = 0; fi != fragment.end(); fi++, count++){
+			bool top_accord = true; // assumed it will be ok
+			bool bottom_accord = true; // assumed it will be ok
+			bool mid_accord = true; // assumed it will be ok
+			bool find = true; // assumed it will be ok
+			size_t last_pos = 0, now_pos = -1;
+
+			while(1){ // process single fragment
+				if(now_pos = (*vi).find(*fi, last_pos) == string::npos){
+					find = false;
+					break;
+				}
+				if(fi == fragment.begin()){
+					if(top_exist && now_pos != 0)
+						top_accord = false;
+					last_pos = now_pos + (*fi).size();
+					break;
+				}else if(fi == fragment.end() - 1){
+					if(bottom_exist && now_pos+(*fi).size() != (*vi).size())
+						bottom_accord = false;
+					break;
+				}else {
+					if(D[count] > 0){ // two fragment seperated by qmk
+						if(now_pos - (last_pos-1) < D[count]){
+							last_pos = now_pos + (*fi).size();
+							continue;
+						}
+						if(now_pos - (last_pos-1) > D[count]){
+							mid_accord = false;
+							break;
+						}
+					}
+					last_pos = now_pos + (*fi).size();
+					break;
+				}
+			}
+			if(!top_accord || !mid_accord || !bottom_accord || !find){
+				can_print = false;
+				break;
+			}
+		}
+		if(can_print){
+			/* print out the according word */
+		}
+	}
 }
 
 int main(int argc, char** argv){
