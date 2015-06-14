@@ -7,7 +7,7 @@
 using namespace std;
 #define MAX 100
 
-enum prcsmode {CHR, QMK, STAR}
+enum prcsmode {CHR, QMK, STAR};
 
 void processFind(string test, vector<string>& ID){
 	int mode = -1;
@@ -15,8 +15,9 @@ void processFind(string test, vector<string>& ID){
 	if(test.find("*") == string::npos && test.find("?") == string::npos){
 		for(vi = ID.begin(); vi != ID.end(); vi++){
 			if(test == *vi)
-				cout << *vi << endsl;
+				cout << *vi << endl;
 		}
+		return;
 	}
 	vector<string> fragment;
 	string current;
@@ -26,7 +27,7 @@ void processFind(string test, vector<string>& ID){
 	// process the search string
 	if(test[0] == '*')
 		top_exist = false; 
-	for(int i = 0; i < test.size(), i++){
+	for(int i = 0; i < test.size(); i++){
 		if(test[i] == '*'){
 			if(mode == -1){
 				mode = STAR;
@@ -55,8 +56,9 @@ void processFind(string test, vector<string>& ID){
 	// go through our ID
 	vector<string>::iterator fi;
 	int count = 0;
+	bool found = false;
 	for(vi = ID.begin(); vi != ID.end(); vi++){
-		bool can_print = true;
+		bool can_print = false; // all accord then become ok
 		for(fi = fragment.begin(), count = 0; fi != fragment.end(); fi++, count++){
 			bool top_accord = true; // assumed it will be ok
 			bool bottom_accord = true; // assumed it will be ok
@@ -65,7 +67,7 @@ void processFind(string test, vector<string>& ID){
 			size_t last_pos = 0, now_pos = -1;
 
 			while(1){ // process single fragment
-				if(now_pos = (*vi).find(*fi, last_pos) == string::npos){
+				if( (now_pos = (*vi).find(*fi, last_pos)) == string::npos){
 					find = false;
 					break;
 				}
@@ -93,15 +95,19 @@ void processFind(string test, vector<string>& ID){
 					break;
 				}
 			}
-			if(!top_accord || !mid_accord || !bottom_accord || !find){
-				can_print = false;
+			if(top_accord && mid_accord && bottom_accord && find){
+				can_print = true;
 				break;
 			}
 		}
 		if(can_print){
 			/* print out the according word */
+			cout << "    " << (*vi) << endl;
+			found = true;
 		}
 	}
+	if(!found)
+		cout << " #Not Found" << endl;
 }
 
 int main(int argc, char** argv){
@@ -121,12 +127,16 @@ int main(int argc, char** argv){
 	cout << " // * : any number(in Domain or 0) of charaters that can be any of {0~9, A~Z, a~z}" << endl;
 	cout << " // it is invalid to type such as **, *?, ?* " << endl;
 
-	cout << " $Type something to search : ";
+	cout << endl << " $Type something to search : ";
 	char cstr[100];
 	while(scanf("%s", cstr) != EOF){
 		string *tmp = new string(cstr);
 		if(tmp->size() == 0){
 			cout << " #please type something" << endl;			
+		}
+		if((*tmp) == "@bye"){
+			cout << " #See you next time! Bye!" << endl;
+			return 0;
 		}
 		for(int i = 0; i < tmp->size(); i++){
 			if((*tmp)[i] < '0' || ((*tmp)[i] > '9' && (*tmp)[i] < 'A') 
