@@ -11,23 +11,28 @@ enum prcsmode {CHR, QMK, STAR};
 
 void processFind(string test, vector<string>& ID){
 	int mode = -1;
+	bool found = false;
 	vector<string>::iterator vi;
 	if(test.find("*") == string::npos && test.find("?") == string::npos){
 		for(vi = ID.begin(); vi != ID.end(); vi++){
-			if(test == *vi)
+			if(test == *vi){
 				cout << *vi << endl;
+				found = true;
+			}
 		}
+		if(!found)
+			cout << " #Not Found" << endl;
 		return;
 	}
 	vector<string> fragment;
 	string current;
 	size_t bottom; // top, bottom not always exist
-	bool top_exist = true, bottom_exist = true;
-	int D[MAX-1];
+	bool top_exist = true, bottom_exist = true, all_qmk = false;// for non-star
+	int D[MAX] = {0}, bottom_dis = 0; // for qmk
 	// process the search string
 	if(test[0] == '*')
 		top_exist = false; 
-	for(int i = 0; i < test.size(); i++){
+	for(int i = 0; i < test.size(); i++){ 
 		if(test[i] == '*'){
 			if(mode == -1){
 				mode = STAR;
@@ -36,73 +41,126 @@ void processFind(string test, vector<string>& ID){
 			mode = STAR;
 			fragment.push_back(current);
 			current.clear();
-			D[fragment.size()-1] = -1;
+			D[fragment.size()] = 0;
 		}else if(test[i] == '?'){
-			if(mode == CHR){
+			if(mode == CHR){ 
 				fragment.push_back(current);
 				current.clear();
-				D[fragment.size()-1] = 1;
-			}else
-				D[fragment.size()-1]++;
-			mode = QMK;
+				D[fragment.size()] = 2;
+				mode = QMK;
+			}else if(mode == -1){ // head = ? condition
+				D[0]++;
+			}else {
+				D[fragment.size()]++;
+				mode = QMK;
+			}
 		}else {
 			current += test[i];
 			mode = CHR;
 		}
 	}
-	if(test[test.size()-1] == '*')
+	if(mode == CHR){ // push the last fragment
+		fragment.push_back(current);
+		current.clear();
+		bottom_dis = 0;
+	}else if(mode == QMK){
+		bottom_dis = D[fragment.size()]-1;
+	}else if(mode == STAR)
 		bottom_exist = false; 
+	if(fragment.size() == 0 && mode == -1){
+		//cout << "all qmk, " << D[0] << endl;
+		all_qmk = true;
+	}
+
 	
 	// go through our ID
 	vector<string>::iterator fi;
 	int count = 0;
-	bool found = false;
-	for(vi = ID.begin(); vi != ID.end(); vi++){
-		bool can_print = false; // all accord then become ok
-		for(fi = fragment.begin(), count = 0; fi != fragment.end(); fi++, count++){
-			bool top_accord = true; // assumed it will be ok
-			bool bottom_accord = true; // assumed it will be ok
-			bool mid_accord = true; // assumed it will be ok
-			bool find = true; // assumed it will be ok
-			size_t last_pos = 0, now_pos = -1;
+	
+	for(fi = fragment.begin(), count = 0; fi != fragment.end(); fi++, count++){
+		cout << (*fi) << ", " << D[count] << ", " << endl;
+	}
+	if(all_qmk){
+		for(vi = ID.begin(); vi != ID.end(); vi++){
+			if((*vi).size() == D[0]){
+				cout << (*vi) << endl;
+				found = true;
+			}
+		}
+		return;
+	}
 
-			while(1){ // process single fragment
-				if( (now_pos = (*vi).find(*fi, last_pos)) == string::npos){
+	for(vi = ID.begin(); vi != ID.end(); vi++){
+		size_t last = 0;
+		bool can_print = true;
+		bool top_accord = true; // assumed it will be ok
+		bool bottom_accord = true; // assumed it will be ok
+		bool mid_accord = true; // assumed it will be ok
+		bool find = true; // assumed it will be ok
+		for(fi = fragment.begin(), count = 0; fi != fragment.end(); fi++, count++){
+			size_t start = 0, current;
+			while(1){
+				if((current = (*vi).find(*fi, start)) == string::npos){
 					find = false;
 					break;
 				}
-				if(fi == fragment.begin()){
-					if(top_exist && now_pos != 0)
+				if(fi == fragment.begin()){ // check top
+					if(top_exist && current < D[0]){
+						start = current+1;
+						continue;
+					}else if(top_exist && current > D[0]){
 						top_accord = false;
-					last_pos = now_pos + (*fi).size();
-					break;
-				}else if(fi == fragment.end() - 1){
-					if(bottom_exist && now_pos+(*fi).size() != (*vi).size())
-						bottom_accord = false;
-					break;
-				}else {
-					if(D[count] > 0){ // two fragment seperated by qmk
-						if(now_pos - (last_pos-1) < D[count]){
-							last_pos = now_pos + (*fi).size();
-							continue;
-						}
-						if(now_pos - (last_pos-1) > D[count]){
-							mid_accord = false;
-							break;
-						}
+						break;
 					}
-					last_pos = now_pos + (*fi).size();
+					if(fi == fragment.end() - 1 && bottom_exist){ // check bottom
+						if(current+(*fi).size()+bottom_dis < (*vi).size()){
+							start = current+1;
+							continue;
+						}else if(current+(*fi).size()+bottom_dis > (*vi).size())
+							bottom_accord = false;
+					}
+					break;
+				}
+				if(D[count] <= 0){ // check fragment after *
+					if(current <= last){
+						start = current+1;
+						continue;
+					}
+					if(fi == fragment.end() - 1 && bottom_exist){ // check bottom
+						if(current+(*fi).size()+bottom_dis < (*vi).size()){
+							start = current+1;
+							continue;
+						}else if(current+(*fi).size()+bottom_dis > (*vi).size())
+							bottom_accord = false;
+					}
+					break;
+				}else{ // check fragment after ?
+					if(current-last < D[count]){
+						start = current+1;
+						continue;
+					}else if(current-last > D[count]){
+						mid_accord = false;
+						break;
+					}
+					if(fi == fragment.end() - 1 && bottom_exist){ // check bottom
+						if(current+(*fi).size()+bottom_dis < (*vi).size()){
+							start = current+1;
+							continue;
+						}else if(current+(*fi).size()+bottom_dis > (*vi).size())
+							bottom_accord = false;
+					}
 					break;
 				}
 			}
-			if(top_accord && mid_accord && bottom_accord && find){
-				can_print = true;
+			last = current + (*fi).size() - 1;
+			if(!find || !top_accord || !mid_accord || !bottom_accord){
+				can_print = false;
 				break;
 			}
 		}
 		if(can_print){
 			/* print out the according word */
-			cout << "    " << (*vi) << endl;
+			cout << (*vi) << endl;
 			found = true;
 		}
 	}
@@ -130,11 +188,13 @@ int main(int argc, char** argv){
 	cout << endl << " $Type something to search : ";
 	char cstr[100];
 	while(scanf("%s", cstr) != EOF){
+		bool can_process = true;
 		string *tmp = new string(cstr);
 		if(tmp->size() == 0){
-			cout << " #please type something" << endl;			
+			cout << " #please type something" << endl;
+			continue;			
 		}
-		if((*tmp) == "@bye"){
+		if((*tmp) == "@"){
 			cout << " #See you next time! Bye!" << endl;
 			return 0;
 		}
@@ -143,17 +203,22 @@ int main(int argc, char** argv){
 				|| ((*tmp)[i] > 'Z' && (*tmp)[i] < 'a') || (*tmp)[i] > 'z'){
 				if((*tmp)[i] != '*' && (*tmp)[i] != '?'){
 					cout << " #there's invalid charater : " << (*tmp)[i] << endl;
+					can_process = false;
 				}
 			}
 			if((*tmp)[i] == '*' && i > 0){
 				if((*tmp)[i-1] == '*' || (*tmp)[i-1] == '?'){
 					cout << " #there's invalid combination : " << (*tmp)[i-1] << (*tmp)[i] << endl;
+					can_process = false;
 				}
 			}
-			if((*tmp)[i] == '?' && i > 0 && (*tmp)[i-1] == '*')
+			if((*tmp)[i] == '?' && i > 0 && (*tmp)[i-1] == '*'){
 				cout << " #there's invalid combination : " << (*tmp)[i-1] << (*tmp)[i] << endl;
+				can_process = false;
+			}
 		}
-		processFind(*tmp, ID);
+		if(can_process)
+			processFind(*tmp, ID);
 		cout << "$Type something to search : ";
 	}
 	return 0;
