@@ -1,7 +1,7 @@
 #include "main_function.h"
 using namespace std;
 
-void processLogin(Set<INDEX>& idset,Customer* user_now);
+void processLogin(Customer* user_now);
 void processCreate(Set<INDEX> &idset);
 void processDelete(Set<INDEX> &idset);
 void processMerge();

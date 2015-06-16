@@ -24,7 +24,7 @@ int main(int argc, char **argv){
 		
 		switch(findCommand(command)){
             		case LOGIN:
-            			processLogin(idset,USER_NOW);
+            			processLogin(USER_NOW);
                 		break;
             		case CREATE:
             			processCreate(idset);
