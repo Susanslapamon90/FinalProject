@@ -17,7 +17,7 @@ int main(int argc, char **argv){
 	Customer* USER_NOW = NULL;
 	int TIME_CNT = 0; /* for history */
 	char command[10];
-	Set<INDEX> idset;
+	set<INDEX> idset;
 	
 	while(1){
 		scanf("%s", command);
@@ -42,13 +42,13 @@ int main(int argc, char **argv){
             			processWithdraw(USER_NOW);
                 		break;
             		case TRANSFER:
-            			processTransfer(USER_NOW,TIME_CNT);
+            			processTransfer(USER_NOW,TIME_CNT,idset);
                 		break;
             		case FIND:
-            			processFind(USER_NOW);
+            			processFind(USER_NOW,idset);
                 		break;
             		case SEARCH:
-            			processSearch(USER_NOW);
+            			processSearch(USER_NOW,idset);
                 		break;
         	}
 	}
