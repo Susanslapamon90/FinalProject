@@ -1,4 +1,5 @@
 #include <iostream>
+#include <assert.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -10,16 +11,16 @@
 #include <set>
 #include <list>
 #include <algorithm>
-#include <set>
 #define TO 0
 #define FROM 1
+#define U64 unsigned long long int 
 using namespace std;
 
 struct transferhistory{
 	string id;
 	int priority;
 	bool tofrom;
-	int money;
+	U64 money;
 	struct transferhistory *bro;
 }; 
 typedef struct transferhistory THistory;
@@ -41,15 +42,16 @@ class INDEX{
 		cu_ptr = &ptr;};
 	~INDEX(){
 		id.clear();
+		delete cu_ptr;
 	}
-	//yet completed
+	// other function
 };
  
 template <class H>
 class Customer{
 private:
 	string encoded_password;
-	int deposit;
+	U64 deposit;
 	H history;
 
 public:
@@ -67,19 +69,16 @@ public:
 	bool authenticated(string raw_password){//authentication;
 		return (encode(raw_password) == encoded_password);
 	};
-	void Deposit(int money){
+	U64 dollars(){
+		return deposit;
+	}
+	void Deposit(U64 money){
 		deposit += money;
-		history.add(1,money);//not sure
 		return;
 	}
-	void withdraw(int money){
-		if(money > deposit)
-			cout << "fail, " <<'[' << deposit << ']' <<" dollors only in current account";
-		else{
-			deposit -= money;
-			cout << "sucess, " <<'[' << deposit << ']' <<" dollors left in current account";
-		}
-		history.add(2,money);//not sure
+	void withdraw(U64 money){
+		assert(money <= deposit);
+		deposit -= money;
 		return;
 	}
 	void mergehistory(Customer id2){
