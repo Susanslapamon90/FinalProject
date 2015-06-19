@@ -13,7 +13,7 @@ const string tablebig ="QWERTYUIOPASDFGHJKLZXCVBNM";
 
 void gen_rand(int casenum,int kind){
 	set<string> stringset;
-	for(int i = 0; stringset.size() <= casenum; i++){
+	for(int i = 0; stringset.size() < casenum; i++){
 		string s;
 		switch(kind){
 			case 1:
