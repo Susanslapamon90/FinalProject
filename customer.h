@@ -21,10 +21,15 @@ class INDEX{
 	public:
 	string id;
 	Customer *cu_ptr;
-	bool operator < (const INDEX &a){return id > a.id;};
-	bool operator == (const INDEX &a){return id == a.id;}
-	bool operator == (const string &a){return a == id;}
+	bool operator < (const INDEX &a)const{return id < a.id;}
+	bool operator > (const INDEX &a)const{return id > a.id;}
+	bool operator == (const INDEX &a)const{return id == a.id;}
+	bool operator == (const string &a)const{return a == id;}
 	/*constructor & destructor*/
+	INDEX(){
+		id = "";
+		cu_ptr = NULL;
+	}
 	INDEX(string st, Customer ptr){
 		id = st;
 		cu_ptr = &ptr;};
