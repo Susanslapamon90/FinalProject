@@ -21,15 +21,10 @@ class INDEX{
 	public:
 	string id;
 	Customer *cu_ptr;
-	bool operator < (const INDEX &a)const{return id < a.id;}
-	bool operator > (const INDEX &a)const{return id > a.id;}
-	bool operator == (const INDEX &a)const{return id == a.id;}
-	bool operator == (const string &a)const{return a == id;}
+	bool operator < (const INDEX &a){return id > a.id;};
+	bool operator == (const INDEX &a){return id == a.id;}
+	bool operator == (const string &a){return a == id;}
 	/*constructor & destructor*/
-	INDEX(){
-		id = "";
-		cu_ptr = NULL;
-	}
 	INDEX(string st, Customer ptr){
 		id = st;
 		cu_ptr = &ptr;};
@@ -80,14 +75,14 @@ public:
 		delete id2; 
 		return;
 	}
-	void transfer(Customer *target, int tsf_money, int p){ // require Alo's transfer function
+	void transfer(Customer *target, U64 tsf_money, int p){ // require Alo's transfer function
 		if(tsf_money > deposit)
 			printf("fail, %llu dollars only in current account\n", deposit);
 		else{
 			deposit -= tsf_money;
 			target->deposit += tsf_money;
-			history.hadd(target->ID, TO, p, tsf_money);
-			target->history.hadd(ID, FROM, p, tsf_money);
+			history.hadd(target->ID, p, TO, tsf_money);
+			target->history.hadd(ID, p, FROM, tsf_money);
 			history.hpair(target->history);
 			printf("success, %llu dollars left in current account\n", deposit);
 		}
