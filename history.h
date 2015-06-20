@@ -85,8 +85,10 @@ public:
 	}
 	void hdelete(){
 		vector<STI *>::iterator i;
-		for(i = stilist.begin(); i != stilist.end(); i++)
-			delete [] (*i);
+		for(i = stilist.begin(); i != stilist.end(); i++){
+			delete (*i);
+			(*i) = NULL;
+		}
 	}
 };           
 
