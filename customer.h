@@ -88,4 +88,8 @@ public:
 		}
 		return;
 	}
+	void search(string ID){
+		history.hsearch(ID);
+		return;
+	}
 };
