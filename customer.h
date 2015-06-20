@@ -11,23 +11,11 @@
 #include <set>
 #include <list>
 #include <algorithm>
-#define TO 0
-#define FROM 1
+#include "history.h"
+#define TO 1
+#define FROM 0
 #define U64 unsigned long long int 
 using namespace std;
-
-struct transferhistory{
-	string id;
-	int priority;
-	bool tofrom;
-	U64 money;
-	struct transferhistory *bro;
-}; 
-typedef struct transferhistory THistory;
-
-bool mergecmp(THistory *a, THistory *b){
-	return(a->priority <= b->priority);
-}
 
 class INDEX{
 	public:
@@ -83,43 +71,20 @@ public:
 	}
 	void mergehistory(Customer id2){
 		deposit += id2.deposit;
-		vector<THistory *> vtmp;
-		merge(history, id2.history, vtmp, mergecmp);
-		history = vtmp;
-			
-		vector<THistory *>::iterator i;
-		for(i = id2.history.begin(); i != id2.history.end(); i++){
-			(*i)->bro->id = ID;
-			(*i)->bro->bro = this;
-			delete (*i);
-		}
-		//history.merge(id2.history);/*I want to use stl merge*/
+		history.hmerge(id2.history, ID);				
 		delete id2; 
 		return;
 	}
 	void transfer(Customer *target, int tsf_money, int p){ // require Alo's transfer function
 		if(tsf_money > deposit)
-			printf("fail, [%d] dollars only in current account\n", deposit);
+			printf("fail, %llu dollars only in current account\n", deposit);
 		else{
 			deposit -= tsf_money;
 			target->deposit += tsf_money;
-			
-			THistory *tmp, *tmp2;
-			tmp = new THistory;
-			tmp2 = new THistory;
-			
-			tmp->money = tmp2->money = tsf_money;
-			tmp->priority = tmp2->priority = p;
-			tmp->id = target->ID;
-			tmp->tofrom = TO;
-			tmp->bro = tmp2;
-			history.push_back(tmp);
-			
-			tmp2->id = ID;
-			tmp2->tofrom = FROM;
-			tmp2->bro = tmp1;
-			target->history.push_back(tmp2);
-			printf("success, [%d] dollars left in current account\n", deposit);
+			history.hadd(target->ID, TO, p, tsf_money);
+			target->history.hadd(ID, FROM, p, tsf_money);
+			history.hpair(target->history);
+			printf("success, %llu dollars left in current account\n", deposit);
 		}
 		return;
 	}
