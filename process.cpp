@@ -29,7 +29,7 @@ void processCreate(set<INDEX> &idset){
 		cout <<"success"<< endl;
 	}else{
 		cout <<"ID "<< ID <<" exists, ";
-		listing10(false, ID);
+		listing10(false, ID, idset);
 	}
 }
 void processDelete(set<INDEX> &idset){
@@ -95,7 +95,7 @@ void processTransfer(Customer* user_now, int TIME_CNT, set<INDEX> &idset){
 	set<INDEX>::iterator tmp = idset.find(ID);
 	if(tmp == NULL){
 		cout <<"ID "<< ID <<" not found, ";
-		listing10(true, ID);
+		listing10(true, ID, idset);
 	}else if(num > user_now->dollars()){
 		cout <<"fail, "<< X <<" dollars only in current account"<< endl;
 	}else{

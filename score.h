@@ -1,8 +1,7 @@
-/*** Last edited by Leinad, 2015/5/28 14:11 ***/
-
 #include <iostream>
 #include <string>
 #include <cmath>
+using namespace std;
 
 /*               ΔL    L-1                           */
 /* score(u, v) = Σ(i) + Σ((u[i] != v[i])? (L-i) : 0) */
@@ -12,10 +11,10 @@
 
 int score(string u, string v){
 	int sum1 = 0, sum2 = 0; /* sum1:length's dif, sum2:character's dif */
-	int dL = abs(u.length() - v.length()); /* mentioned above */
-	int L = (u.length() < v.length())? u.length() : v.length();
+	int dL = abs((int)(u.size() - v.size())); /* mentioned above */
+	int L = (u.size() < v.size())? u.size() : v.size();
 	
-	for(int i = 1; i <= L; i++)
+	for(int i = 1; i <= dL; i++)
 		sum1 += i;
 
 	for(int i = 0; i <= L-1; i++)
