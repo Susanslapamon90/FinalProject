@@ -17,14 +17,14 @@ int main(int argc, char **argv){
 	Customer* USER_NOW = NULL;
 	int TIME_CNT = 0; /* for history */
 	char command[10];
-	Set<INDEX> idset;
+	set<INDEX> idset;
 	
 	while(1){
 		scanf("%s", command);
 		
 		switch(findCommand(command)){
             		case LOGIN:
-            			processLogin(USER_NOW);
+            			processLogin(idset,USER_NOW);
                 		break;
             		case CREATE:
             			processCreate(idset);
@@ -33,22 +33,22 @@ int main(int argc, char **argv){
                 		processDelete(idset);
                 		break;
             		case MERGE:
-						processMerge();
+				processMerge();
                 		break;
             		case DEPOSIT:
                 		processDeposit(USER_NOW);
-						break;
-					case WITHDRAW:
+				break;
+			case WITHDRAW:
             			processWithdraw(USER_NOW);
                 		break;
             		case TRANSFER:
-            			processTransfer(USER_NOW,TIME_CNT);
+            			processTransfer(USER_NOW,TIME_CNT,idset);
                 		break;
             		case FIND:
-            			processFind(USER_NOW);
+            			processFind(USER_NOW,idset);
                 		break;
             		case SEARCH:
-            			processSearch(USER_NOW);
+            			processSearch(USER_NOW,idset);
                 		break;
         	}
 	}
