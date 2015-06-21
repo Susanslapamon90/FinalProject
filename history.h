@@ -14,11 +14,7 @@ struct singletransferinfo{
 };
 typedef struct singletransferinfo STI;
 
-bool cmp(STI *a, STI *b){
-	assert(a != NULL);
-	assert(b != NULL);
-	return (a->priority < b->priority);
-}
+bool cmp(STI *a, STI *b);
 
 class THistory{
 public:
@@ -91,4 +87,3 @@ public:
 		}
 	}
 };           
-

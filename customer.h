@@ -32,8 +32,7 @@ public:
 		deposit = 0;
 		H history;
 	};
-	~Customer(){
-		delete history;
+	~Customer(){	
 	};
 	bool authenticated(string raw_password){//authentication;
 		return (encode(raw_password) == encoded_password);
@@ -53,7 +52,7 @@ public:
 	void mergehistory(Customer id2){
 		deposit += id2.deposit;
 		history.hmerge(id2.history, ID);				
-		delete id2; 
+		delete &id2; 
 		return;
 	}
 	void transfer(Customer *target, U64 tsf_money, int p){ // require Alo's transfer function
@@ -81,9 +80,10 @@ class INDEX{
 	public:
 	string id;
 	Customer<H> *cu_ptr;
-	bool operator < (const INDEX &a){return id > a.id;};
+	bool operator < (const INDEX& a)const{return id < a.id; }
 	bool operator == (const INDEX &a){return id == a.id;}
 	bool operator == (const string &a){return a == id;}
+	bool operator() (const INDEX &a, const INDEX &b){return a.id < b.id;}
 	/*constructor & destructor*/
 	INDEX(string st,Customer<H> ptr){
 		id = st;
@@ -96,5 +96,5 @@ class INDEX{
 		if(cu_ptr != NULL)
 		delete cu_ptr;
 	}
-	// other function
+	// other function, if needed
 };

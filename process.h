@@ -1,5 +1,6 @@
 #include "customer.h"
 #include "history.h"
+
 using namespace std;
 
 typedef set<INDEX<THistory> > Set;
@@ -14,3 +15,4 @@ void processWithdraw(customer* user_now);
 void processTransfer(customer* user_now, int &TIME_CNT, Set &idset);
 void processFind(customer* user_now, Set &idset);
 void processSearch(customer* user_now, Set &idset);
+
