@@ -32,7 +32,7 @@ public:
 		deposit = 0;
 		H history;
 	};
-	~Customer(){	
+	~Customer(){
 	};
 	bool authenticated(string raw_password){//authentication;
 		return (encode(raw_password) == encoded_password);

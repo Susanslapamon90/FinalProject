@@ -4,7 +4,7 @@ using namespace std;
 enum commandList {LOGIN, CREATE, DELETE, MERGE, 
 		  DEPOSIT, WITHDRAW, TRANSFER, FIND, SEARCH};
 int findCommand(char *command){
-	char *commandString[9] = {"login", "create", "delete", "merge", 
+	char commandString[9][10] = {"login", "create", "delete", "merge", 
 		"deposit", "withdraw", "transfer", "find", "search"};
 	int i;
 	for(i = 0; i < 9; i++)
@@ -33,7 +33,7 @@ int main(int argc, char **argv){
                 		processDelete(idset);
                 		break;
             		case MERGE:
-				processMerge();
+				processMerge(idset);
                 		break;
             		case DEPOSIT:
                 		processDeposit(USER_NOW);
