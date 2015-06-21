@@ -33,7 +33,7 @@ public:
 		H history;
 	};
 	~Customer(){
-		delete history;
+//		delete history;
 	};
 	bool authenticated(string raw_password){//authentication;
 		return (encode(raw_password) == encoded_password);
