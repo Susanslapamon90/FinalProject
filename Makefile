@@ -1,5 +1,5 @@
 CPPFLAGS = -O2 -Wall
-LO = md5.cpp
+LO = md5.cpp history.cpp
 OTHER = process.cpp
 name = final_project
 
