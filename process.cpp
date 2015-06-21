@@ -97,7 +97,7 @@ void processWithdraw(customer* user_now){
 	}
 }
 
-void processTransfer(customer* user_now, int TIME_CNT, Set &idset){
+void processTransfer(customer* user_now, int& TIME_CNT, Set &idset){
 	unsigned long long num = 0, X = user_now->dollars();
 	string ID;
 	cin >> num >> ID;
@@ -112,6 +112,7 @@ void processTransfer(customer* user_now, int TIME_CNT, Set &idset){
 		user_now->transfer(tmp->cu_ptr, num, TIME_CNT);
 		X = user_now->dollars();
 		cout << "sucess, "<< X <<" dollars left in current account"<< endl;
+		TIME_CNT++;
 	}
 }
 void processFind(customer* user_now, Set &idset){
