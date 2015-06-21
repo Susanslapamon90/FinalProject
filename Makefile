@@ -1,5 +1,5 @@
 CPPFLAGS = -O2 -Wall
-LO = encode.cpp
+LO = md5.cpp
 OTHER = process.cpp
 name = final_project
 
