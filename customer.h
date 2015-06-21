@@ -56,16 +56,11 @@ public:
 		return;
 	}
 	void transfer(Customer *target, U64 tsf_money, int p){ // require Alo's transfer function
-		if(tsf_money > deposit)
-			printf("fail, %llu dollars only in current account\n", deposit);
-		else{
-			deposit -= tsf_money;
-			target->deposit += tsf_money;
-			history.hadd(target->ID, p, TO, tsf_money);
-			target->history.hadd(ID, p, FROM, tsf_money);
-			history.hpair(target->history);
-			printf("success, %llu dollars left in current account\n", deposit);
-		}
+		deposit -= tsf_money;
+		target->deposit += tsf_money;
+		history.hadd(target->ID, p, TO, tsf_money);
+		target->history.hadd(ID, p, FROM, tsf_money);
+		history.hpair(target->history);
 		return;
 	}
 	void search(string ID){
