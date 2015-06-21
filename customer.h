@@ -3,6 +3,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include "md5.h"
 #include <string>
 /*---------------*/
 #include <ctime>
@@ -11,29 +12,10 @@
 #include <set>
 #include <list>
 #include <algorithm>
-#include "history.h"
 #define TO 1
 #define FROM 0
 #define U64 unsigned long long int 
 using namespace std;
-
-class INDEX{
-	public:
-	string id;
-	Customer *cu_ptr;
-	bool operator < (const INDEX &a){return id > a.id;};
-	bool operator == (const INDEX &a){return id == a.id;}
-	bool operator == (const string &a){return a == id;}
-	/*constructor & destructor*/
-	INDEX(string st, Customer ptr){
-		id = st;
-		cu_ptr = &ptr;};
-	~INDEX(){
-		id.clear();
-		delete cu_ptr;
-	}
-	// other function
-};
  
 template <class H>
 class Customer{
@@ -48,12 +30,11 @@ public:
 		ID  = idendity;
 		encoded_password = encode(raw_password); //encode is ALO's encoding function;
 		deposit = 0;
+		H history;
 	};
 	~Customer(){
-		delete ID;
-		delete encoded_password;
 		delete history;
-	}
+	};
 	bool authenticated(string raw_password){//authentication;
 		return (encode(raw_password) == encoded_password);
 	};
@@ -92,4 +73,28 @@ public:
 		history.hsearch(ID);
 		return;
 	}
+};
+
+
+template<class H>
+class INDEX{
+	public:
+	string id;
+	Customer<H> *cu_ptr;
+	bool operator < (const INDEX &a){return id > a.id;};
+	bool operator == (const INDEX &a){return id == a.id;}
+	bool operator == (const string &a){return a == id;}
+	/*constructor & destructor*/
+	INDEX(string st,Customer<H> ptr){
+		id = st;
+		cu_ptr = &ptr;};
+	INDEX(string str){
+		id = str;
+		cu_ptr = NULL;
+	}
+	~INDEX(){
+		if(cu_ptr != NULL)
+		delete cu_ptr;
+	}
+	// other function
 };

@@ -1,12 +1,16 @@
 #include "customer.h"
+#include "history.h"
 using namespace std;
 
-void processLogin(set<INDEX>& idset,Customer* user_now);
-void processCreate(set<INDEX> &idset);
-void processDelete(set<INDEX> &idset);
-void processMerge(set<INDEX> &idset);
-void processDeposit(Customer* user_now);
-void processWithdraw(Customer* user_now);
-void processTransfer(Customer* user_now, int &TIME_CNT, set<INDEX> &idset);
-void processFind(Customer* user_now, set<INDEX> &idset);
-void processSearch(Customer* user_now, set<INDEX> &idset);
+typedef set<INDEX<THistory> > Set;
+typedef Customer<THistory> customer;
+
+void processLogin(Set &idset,customer* user_now);
+void processCreate(Set &idset);
+void processDelete(Set &idset);
+void processMerge(Set &idset);
+void processDeposit(customer* user_now);
+void processWithdraw(customer* user_now);
+void processTransfer(customer* user_now, int &TIME_CNT, Set &idset);
+void processFind(customer* user_now, Set &idset);
+void processSearch(customer* user_now, Set &idset);

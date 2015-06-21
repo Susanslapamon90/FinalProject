@@ -14,10 +14,10 @@ int findCommand(char *command){
 }
 
 int main(int argc, char **argv){
-	Customer* USER_NOW = NULL;
+	Customer<THistory>* USER_NOW = NULL;
 	int TIME_CNT = 0; /* for history */
 	char command[10];
-	set<INDEX> idset;
+	set<INDEX<THistory> > idset;
 	
 	while(1){
 		scanf("%s", command);

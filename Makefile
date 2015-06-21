@@ -7,3 +7,5 @@ all : $(TARGET)
 
 all:
 	g++ $(CPPFLAGS) $(LO) $(OTHER) FPmain.cpp -o $(name)
+rm:
+	rm *.cpp~ *.h~ Makefile~

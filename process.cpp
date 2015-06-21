@@ -1,24 +1,32 @@
 #include "process.h"
 using namespace std;
+ 
+//typedef set<INDEX<THistory>> Set;
+//typedef Customer<THistory> costumer;
 
-void processLogin(set<INDEX>& idset,Customer* user_now){
+
+void processLogin(Set& idset,customer* user_now){
 	bool success = false;
 	string ID, PW;
 	cin >> ID >> PW;
-	set<INDEX>::iterator tmp = idset.find(ID);
-	if(tmp == NULL)
-		cout <<"ID "<< ID <<" not found"<< endl;
-	else if(!tmp->authenticated(PW))
-		cout <<"wrong password"<< endl;
-	else {
-		success = true;
-		cout <<"success"<< endl;
-	}
-	if(success)
-		user_now = tmp;
+	Customer<THistory> a(ID,PW);
+//	INDEX<THistory> b(ID,a);
+//	Set::iterator tmp = idset.find(a);
+//	if(tmp == idser.end())
+//		cout <<"ID "<< ID <<" not found"<< endl;
+//	else if(!tmp->authenticated(PW))
+//		cout <<"wrong password"<< endl;
+//	else {
+//		success = true;
+//		cout <<"success"<< endl;
+//	}
+//	if(success)
+//		user_now = tmp;
 	return;
 }
-void processCreate(set<INDEX> &idset){
+
+/*
+void processCreate(Set &idset){
 	string ID, PW;
 	cin >> ID >> PW;
 	if(find(ID) == NULL){
@@ -32,11 +40,11 @@ void processCreate(set<INDEX> &idset){
 		listing10(false, ID, idset);
 	}
 }
-void processDelete(set<INDEX> &idset){
+void processDelete(Set &idset){
 	bool success = false;
 	string ID, PW;
 	cin >> ID >> PW;
-	set<INDEX>::iterator tmp = idset.find(ID);
+	Set<INDEX>::iterator tmp = idset.find(ID);
 	if(tmp == NULL)
 		cout <<"ID "<< ID <<" not found"<< endl;
 	else if(!tmp->authenticated(PW))
@@ -50,12 +58,12 @@ void processDelete(set<INDEX> &idset){
 		delete *tmp;
 	return;
 }
-void processMerge(set<INDEX> &idset){
+void processMerge(Set &idset){
 	unsigned long long X = 0;
 	string ID1, ID2, PW1, PW2;
 	cin >> ID1 >> PW1 >> ID2 >> PW2;
-	set<INDEX>::iterator tmp1 = idset.find(ID1);
-	set<INDEX>::iterator tmp2 = idset.find(ID2);
+	Set::iterator tmp1 = idset.find(ID1);
+	Set::iterator tmp2 = idset.find(ID2);
 	if(tmp1 == NULL)
 		cout <<"ID "<< ID1 <<" not found"<< endl;
 	else if(tmp2 == NULL)
@@ -70,14 +78,14 @@ void processMerge(set<INDEX> &idset){
 		cout <<"success, "<< ID1 <<" has "<< X <<" dollars"<< endl;
 	}
 }
-void processDeposit(Customer* user_now){
+void processDeposit(customer* user_now){
 	unsigned long long num = 0, X = 0;
 	cin >> num;
 	user_now->Deposit(num);
 	X = user_now->dollars();
 	cout <<"success, "<< X <<" dollars in current account"<< endl;
 }
-void processWithdraw(Customer* user_now){
+void processWithdraw(customer* user_now){
 	unsigned long long num = 0, X = user_now->dollars();
 	cin >> num;
 	if(num > X)
@@ -88,11 +96,11 @@ void processWithdraw(Customer* user_now){
 		cout << "sucess, "<< X <<" dollars left in current account"<< endl;
 	}
 }
-void processTransfer(Customer* user_now, int TIME_CNT, set<INDEX> &idset){
+void processTransfer(customer* user_now, int TIME_CNT, Set &idset){
 	unsigned long long num = 0, X = user_now->dollars();
 	string ID;
 	cin >> num >> ID;
-	set<INDEX>::iterator tmp = idset.find(ID);
+	Set::iterator tmp = idset.find(ID);
 	if(tmp == NULL){
 		cout <<"ID "<< ID <<" not found, ";
 		listing10(true, ID, idset);
@@ -104,17 +112,18 @@ void processTransfer(Customer* user_now, int TIME_CNT, set<INDEX> &idset){
 		cout << "sucess, "<< X <<" dollars left in current account"<< endl;
 	}
 }
-void processFind(Customer* user_now, set<INDEX> &idset){
+void processFind(customer* user_now, Set &idset){
 	string wild_card_ID;
 	cin >> wild_card_ID;
 	FIND(user_now, idset, wild_card_ID);
 }
-void processSearch(Customer* user_now, set<INDEX> &idset){
+void processSearch(customer* user_now, Set &idset){
 	string ID;
 	cin >> ID;
-	set<INDEX>::iterator tmp = idset.find(ID);
+	Set::iterator tmp = idset.find(ID);
 	if(tmp == NULL)
 		cout <<"ID "<< ID <<" not found"<< endl;
 	else
 		user_now->search(ID);
 }
+*/
