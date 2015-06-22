@@ -2,7 +2,7 @@
 #include <cstdlib>
 #include <iostream>
 #include <string>
-#include <set>
+#include <vector>
 
 using namespace std;
 
@@ -12,8 +12,7 @@ const string tablesmall ="qwertyuiopasdfghjklzxcvbnm";
 const string tablebig ="QWERTYUIOPASDFGHJKLZXCVBNM";
 
 void gen_rand(int casenum,int kind){
-	set<string> stringset;
-	for(int i = 0; stringset.size() < casenum; i++){
+	for(int i = 0; i < casenum; i++){
 		string s;
 		switch(kind){
 			case 1:
@@ -31,13 +30,8 @@ void gen_rand(int casenum,int kind){
 			s += table[rand() % 62];
 			if(rand() % 10 == 0) stop = true;
 		}
-		stringset.insert(s);
-		s.clear();
+		cout << s << endl;
 	}
-
-	set<string>:: iterator it;
-	for(it = stringset.begin(); it != stringset.end(); it++)
-		cout << *it <<endl;
 }
 
 
