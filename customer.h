@@ -87,8 +87,8 @@ class INDEX{
 		cu_ptr = NULL;
 	}
 	~INDEX(){
-		if(cu_ptr != NULL)
-		delete cu_ptr;
+//		if(cu_ptr != NULL)
+//		delete cu_ptr;
 	}
 	// other function, if needed
 };
