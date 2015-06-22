@@ -4,6 +4,7 @@
 #include <cstdlib>
 #include <string>
 #include <vector>
+#include <ctime>
 using namespace std;
 #define MAX 100
 
@@ -77,9 +78,9 @@ void processFind(string test, vector<string>& ID){
 	vector<string>::iterator fi;
 	int count = 0;
 	
-	for(fi = fragment.begin(), count = 0; fi != fragment.end(); fi++, count++){
+	/*for(fi = fragment.begin(), count = 0; fi != fragment.end(); fi++, count++){
 		cout << (*fi) << ", " << D[count] << ", " << endl;
-	}
+	}*/
 	if(all_qmk){
 		for(vi = ID.begin(); vi != ID.end(); vi++){
 			if((*vi).size() == D[0]){
@@ -169,6 +170,7 @@ void processFind(string test, vector<string>& ID){
 }
 
 int main(int argc, char** argv){
+	time_t t1, t2;
 	vector<string> ID;
 	ifstream fp(argv[1]);
 	string *tmp = new string;
@@ -217,8 +219,11 @@ int main(int argc, char** argv){
 				can_process = false;
 			}
 		}
+		t1 = time(NULL);
 		if(can_process)
 			processFind(*tmp, ID);
+		t2 = time(NULL);
+		printf("The reading time is %0ld:%0ld (min:sec)\n", (t2-t1)/60, (t2-t1)%60);
 		cout << "$Type something to search : ";
 	}
 	return 0;
