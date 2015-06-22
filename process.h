@@ -6,7 +6,7 @@ using namespace std;
 typedef set<INDEX<THistory> > Set;
 typedef Customer<THistory> customer;
 
-void processLogin(Set &idset,customer* user_now);
+void processLogin(Set &idset,customer** user_now);
 void processCreate(Set &idset);
 void processDelete(Set &idset);
 void processMerge(Set &idset);

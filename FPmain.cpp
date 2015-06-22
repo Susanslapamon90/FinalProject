@@ -24,7 +24,7 @@ int main(int argc, char **argv){
 		
 		switch(findCommand(command)){
             		case LOGIN:
-            			processLogin(idset,USER_NOW);
+            			processLogin(idset,&USER_NOW);
                 		break;
             		case CREATE:
             			processCreate(idset);
@@ -51,6 +51,8 @@ int main(int argc, char **argv){
             			processSearch(USER_NOW,idset);
                 		break;
         	}
+//		if(USER_NOW == NULL)
+//			cout << "null now" <<endl;
 	}
 	return 0;
 }

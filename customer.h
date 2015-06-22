@@ -86,9 +86,11 @@ class INDEX{
 		id = str;
 		cu_ptr = NULL;
 	}
+	INDEX(string ID,string password){
+		id = ID;
+		cu_ptr = new Customer<H>(ID,password);
+	}
 	~INDEX(){
-		if(cu_ptr != NULL)
-		delete cu_ptr;
 	}
 	// other function, if needed
 };

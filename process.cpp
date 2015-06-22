@@ -7,7 +7,7 @@ string b = "Hello",c = "fuck";
 customer cus_temp(b,c);
 
 
-void processLogin(Set& idset,customer* user_now){
+void processLogin(Set& idset,customer** user_now){
 	bool success = false;
 	string ID, PW;
 	cin >> ID >> PW;
@@ -22,7 +22,7 @@ void processLogin(Set& idset,customer* user_now){
 		cout <<"success"<< endl;
 	}
 	if(success)
-		user_now = tmp -> cu_ptr;
+		*user_now = (tmp -> cu_ptr);
 }
 
 void processCreate(Set &idset){
@@ -30,9 +30,8 @@ void processCreate(Set &idset){
 	cin >> ID >> PW;
 	INDEX<THistory> id_tmp(ID,cus_temp);
 	if(idset.find(id_tmp) == idset.end()){
-		customer new_customer(ID,PW);
-		INDEX<THistory> new_index(ID,new_customer);
-		idset.insert(new_index);
+		INDEX<THistory> *new_index = new INDEX<THistory>(ID,PW);
+		idset.insert(*new_index);
 	// others require the DS of our ID web
 		cout <<"success"<< endl;
 	}else{
