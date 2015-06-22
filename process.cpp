@@ -100,7 +100,7 @@ void processWithdraw(customer* user_now){
 void processTransfer(customer* user_now, int& TIME_CNT, Set &idset){
 	unsigned long long num = 0, X = user_now->dollars();
 	string ID;
-	cin >> num >> ID;
+	cin >>  ID >> num;
 	INDEX<THistory> id_tmp(ID,cus_temp);
 	Set::iterator tmp = idset.find(id_tmp);
 	if(tmp == idset.end()){
