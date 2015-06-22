@@ -52,7 +52,6 @@ public:
 	void mergehistory(Customer id2){
 		deposit += id2.deposit;
 		history.hmerge(id2.history, ID);				
-		delete &id2; 
 		return;
 	}
 	void transfer(Customer *target, U64 tsf_money, int p){ // require Alo's transfer function
