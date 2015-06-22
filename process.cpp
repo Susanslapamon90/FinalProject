@@ -75,6 +75,7 @@ void processMerge(Set &idset){
 		tmp1->cu_ptr->mergehistory(*(tmp2->cu_ptr));
 		X = tmp1->cu_ptr->dollars();
 		cout <<"success, "<< ID1 <<" has "<< X <<" dollars"<< endl;
+		idset.erase(id_tmp2);
 	}
 }
 
