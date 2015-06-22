@@ -62,28 +62,34 @@ class INDEX{
 /*int ctable[20] = {1, 3, 6, 10, 15, 21, 28, 36, 45, 55, 
 	66, 78, 91, 105, 120, 136, 153, 171, 190, 210}*/ /* table of valid n_len */
 
-const string stable = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
+const string strtable = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
 
-void all_digit_change(int h, vector<int> NC, set<string> &listset2, string &sample){
+void all_digit_change(int h, vector<int> &NC, set<string> &listset2, string &sample){
 	if(h > NC.size()){
 		listset2.insert(sample);
 		return;
 	}
 	for(int i = 0; i < 62; i++){
-		sample[sample.size()-NC[h]] = stable[i];
+		if(strtable[i] == sample[sample.size()-NC[h-1]])
+			continue;
+		sample[sample.size()-NC[h-1]] = strtable[i];
 		all_digit_change(h+1, NC, listset2, sample);
 	}
 }
 
-void pick_or_not(int n, int h, vector<int> NC, set<string> &listset2, string sample){
-	if(n < h && n != 0)
+void pick_or_not(int n, int h, vector<int> &NC, set<string> &listset2, string sample){
+	if(n < h && n != 0){
+			//cout << "fuck!!!" << endl;
 		return;
-	else if(n == 0){
+	}else if(n == 0){
+			//cout << "yeah!!!" << endl;
 		all_digit_change(1, NC, listset2, sample);
+		return;
 	}
-	pick_or_not(n, h, NC, listset2, sample); // not pick
+	pick_or_not(n, h+1, NC, listset2, sample); // not pick
 	NC.push_back(h); 
 	pick_or_not(n-h, h+1, NC, listset2, sample); // pick
+	//cout << "fuck yeah!!!" << endl;
 }
 
 void extend(int n_len, int n_var, set<string> &listset2, string ID){
@@ -93,7 +99,7 @@ void extend(int n_len, int n_var, set<string> &listset2, string ID){
 		return;
 	}
 	for(int i = 0; i < 62; i++){
-		string ex_string = ID + stable[i];
+		string ex_string = ID + strtable[i];
 		extend(n_len - 1, n_var, listset2, ex_string);
 	}
 }
@@ -110,10 +116,10 @@ void clear_exist_ID(set<string> &listset2, set<INDEX> idset){
 
 void listing10(bool exist, string ID, set<INDEX> &idset){
 	int i;
-	set<TL> listset;
 	set<INDEX>::iterator si;
-	set<TL>::iterator ti;
 	if(exist){
+		set<TL> listset;
+		set<TL>::iterator ti;
 		for(si = idset.begin(); si != idset.end(); si++){
 				listset.insert(TL(si->id, score(ID, si->id)));
 		}
@@ -126,14 +132,17 @@ void listing10(bool exist, string ID, set<INDEX> &idset){
 	}else{
 		set<string> listset2;
 		set<string>::iterator tt;
-		vector<int> needChange; 
+		vector<int> needChange;
 		int num_in_set = listset2.size(), lv, n_len, n_var, cnt;
 		for(lv = 1; num_in_set < 10; lv++){
 			/* shorten length */
 			for(n_len = 1, cnt = 1; n_len <= lv; cnt++, n_len+=cnt){
 				n_var = lv - n_len;
-				string cut_string(ID, 0, ID.size()-n_len);
-				pick_or_not(n_var, 1, needChange, listset2, cut_string);
+				if(ID.size() > n_len){
+					string cut_string(ID, 0, ID.size()-n_len);
+					pick_or_not(n_var, 1, needChange, listset2, cut_string);
+				}else
+					break;
 			}
 			/* same length */
 				pick_or_not(lv, 1, needChange, listset2, ID);
@@ -145,9 +154,13 @@ void listing10(bool exist, string ID, set<INDEX> &idset){
 			clear_exist_ID(listset2, idset);
 			num_in_set = listset2.size();
 			if(num_in_set >= 10){
-				for(i = 0, tt = listset2.begin(); i < 10; i++, tt++){
-					cout << *tt <<", "<< lv << endl;
+				for(i = 0, tt = listset2.begin(); i < 10; tt++){
+					if(*tt != ID){
+						cout << *tt <<", "<< lv << endl;
+						i++;
+					}
 				}
+				break;
 			}
 		}
 	}
