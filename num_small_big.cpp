@@ -13,7 +13,7 @@ const string tablebig ="QWERTYUIOPASDFGHJKLZXCVBNM";
 
 void gen_rand(int casenum,int kind){
 	set<string> stringset;
-	for(int i = 0; stringset.size() < casenum; i++){
+	for(int i = 0; (int)stringset.size() < casenum; i++){
 		string s;
 		switch(kind){
 			case 1:
@@ -34,12 +34,10 @@ void gen_rand(int casenum,int kind){
 		stringset.insert(s);
 		s.clear();
 	}
-
 	set<string>:: iterator it;
 	for(it = stringset.begin(); it != stringset.end(); it++)
 		cout << *it <<endl;
 }
-
 
 int main(){
 	int casenum1,casenum2,casenum3;

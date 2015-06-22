@@ -50,6 +50,8 @@ int main(int argc, char **argv){
             		case SEARCH:
             			processSearch(USER_NOW,idset);
                 		break;
+			default:
+				cout << "wrong command" << endl;
         	}
 //		if(USER_NOW == NULL)
 //			cout << "null now" <<endl;
