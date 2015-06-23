@@ -157,11 +157,11 @@ void listing10(bool exist, string ID, set<INDEX> &idset){
 				listset.insert(TL(*tt, lv));
 			}
 			needChange.clear();
-			num_in_set = listset2.size();
+			num_in_set = listset.size();
 			if(num_in_set >= 10){
-				for(i = 0, tt = listset2.begin(); i < 10; tt++){
-					if(*tt != ID){
-						cout << *tt <<", "<< lv << endl;
+				for(i = 0, ti = listset.begin(); i < 10; ti++){
+					if(ti->id != ID){
+						cout << ti->id <<", "<< ti->score << endl;
 						i++;
 					}
 				}
