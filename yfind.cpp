@@ -38,7 +38,7 @@ class INDEX{
 
 enum prcsmode {CHR, QMK, STAR};
 
-void processFind(string test, set<INDEX>& idset){
+void processFind(string user, string test, set<INDEX>& idset){
 	int mode = -1;
 	bool found = false;
 	set<INDEX>::iterator si;
@@ -50,7 +50,7 @@ void processFind(string test, set<INDEX>& idset){
 			}
 		}
 		if(!found)
-			cout << " #Not Found" << endl;
+			cout /*<< " #Not Found" */<< endl;
 		return;
 	}
 	vector<string> fragment;
@@ -117,7 +117,7 @@ void processFind(string test, set<INDEX>& idset){
 			}
 		}
 		if(!found)
-			cout << " #Not Found" << endl;
+			cout /*<< " #Not Found" */<< endl;
 		return;
 	}
 
@@ -189,14 +189,14 @@ void processFind(string test, set<INDEX>& idset){
 				break;
 			}
 		}
-		if(can_print){
+		if(can_print && si->id != user){
 			/* print out the according word */
 			cout << (si->id) << endl;
 			found = true;
 		}
 	}
 	if(!found)
-		cout << " #Not Found" << endl;
+		cout /*<< " #Not Found" */<< endl;
 }
 
 int main(int argc, char** argv){
@@ -248,8 +248,11 @@ int main(int argc, char** argv){
 				can_process = false;
 			}
 		}
-		if(can_process)
-			processFind(*tmp, ID);
+		if(can_process){
+			string *user_now = new string;
+			cin >> *user_now; 
+			processFind(*user_now, *tmp, ID);
+		}
 		cout << "$Type something to search : ";
 	}
 	return 0;
