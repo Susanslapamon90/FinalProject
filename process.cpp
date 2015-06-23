@@ -389,7 +389,7 @@ void processWithdraw(customer* user_now){
 	else{
 		user_now->withdraw(num);
 		X = user_now->dollars();
-		cout << "sucess, "<< X <<" dollars left in current account"<< endl;
+		cout << "success, "<< X <<" dollars left in current account"<< endl;
 	}
 }
 
