@@ -108,7 +108,7 @@ void clear_exist_ID(set<string> &listset2, set<INDEX> idset){
 	set<string>::iterator ti;
 	for(ti = listset2.begin(); ti != listset2.end(); ti++){
 		if(idset.find(INDEX(*ti)) != idset.end()){
-			cout <<"clear "<< *ti << endl;
+			//cout <<"clear "<< *ti << endl;
 			listset2.erase(ti);
 		}
 	}
