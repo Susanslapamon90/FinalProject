@@ -1,10 +1,139 @@
 #include "process.h"
+#include "score.h"
 using namespace std;
  
 //typedef set<INDEX<THistory> > Set;
 //typedef Customer<THistory> customer;
 string b = "Hello",c = "fuck";
 customer cus_temp(b,c);
+
+class TL{
+public:
+	string id;
+	int score;
+	bool operator<(const TL &a)const{
+		if(score != a.score)
+			return score < a.score;
+		else
+			return id < a.id;
+	}
+	TL(string str, int n){
+		id = str;
+		score = n;
+	}
+};
+
+const string strtable = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
+
+void all_digit_change(int h, vector<int> &NC, set<string> &listset2, string &sample, int pos, const string origin){
+	if(h > NC.size()){
+		listset2.insert(sample);
+		return;
+	}
+	for(int i = 0; i < 62; i++){
+		if(strtable[i] == origin[pos-NC[h-1]])
+			continue;
+		sample[pos-NC[h-1]] = strtable[i];
+		all_digit_change(h+1, NC, listset2, sample, pos, origin);
+	}
+}
+
+void pick_or_not(int n, int h, vector<int> NC, set<string> &listset2, string sample, int pos){
+	if(n < h && n != 0){
+			//cout << "fuck!!!" << endl;
+		return;
+	}else if(n == 0){
+			//cout << "yeah!!!" << endl;
+		all_digit_change(1, NC, listset2, sample, pos, sample);
+		return;
+	}
+	pick_or_not(n, h+1, NC, listset2, sample, pos); // not pick
+	NC.push_back(h); 
+	pick_or_not(n-h, h+1, NC, listset2, sample, pos); // pick
+	//cout << "fuck yeah!!!" << endl;
+}
+
+void extend(int cnt, int n_var, set<string> &listset2, string ID, int pos){
+	if(cnt == 0){
+		vector<int> needChange; 
+		pick_or_not(n_var, 1, needChange, listset2, ID, pos);
+		return;
+	}
+	for(int i = 0; i < 62; i++){
+		string ex_string = ID + strtable[i];
+		extend(cnt - 1, n_var, listset2, ex_string, pos);
+	}
+}
+
+void clear_exist_ID(set<string> &listset2, Set idset){
+	set<string>::iterator ti;
+	for(ti = listset2.begin(); ti != listset2.end(); ti++){
+		if(idset.find(INDEX<THistory>(*ti)) != idset.end()){
+			//cout <<"clear "<< *ti << endl;
+			listset2.erase(ti);
+		}
+	}
+}
+
+
+void listing10(bool exist, string ID, Set &idset){
+	int i;
+	Set::iterator si;
+	set<TL> listset;
+	set<TL>::iterator ti;
+	if(exist){
+		for(si = idset.begin(); si != idset.end(); si++){
+				listset.insert(TL(si->id, score(ID, si->id)));
+		}
+		for(i = 0, ti = listset.begin(); i < 10 && ti != listset.end(); ti++){
+			if(ti->score != 0){
+				cout << ti->id <<", "<< ti->score << endl;
+				i++;
+			}
+		}
+	}else{
+		set<string> listset2;
+		set<string>::iterator tt;
+		vector<int> needChange;
+		int num_in_set = listset2.size(), lv, n_len, n_var, cnt;
+		for(lv = 1; num_in_set < 10; lv++){
+			/* shorten length */
+			for(n_len = 1, cnt = 1; n_len <= lv; cnt++, n_len+=cnt){
+				n_var = lv - n_len;
+				if(ID.size() > cnt){
+					string cut_string(ID, 0, ID.size()-cnt);
+					pick_or_not(n_var, 1, needChange, listset2, cut_string, cut_string.size());
+				}else
+					break;
+			}
+			/* same length */
+				pick_or_not(lv, 1, needChange, listset2, ID, ID.size());
+			/* extend length */
+			for(n_len = 1, cnt = 1; n_len <= lv; cnt++, n_len+=cnt){
+				n_var = lv - n_len;
+				extend(cnt, n_var, listset2, ID, ID.size());
+			}
+			clear_exist_ID(listset2, idset);
+			for(tt = listset2.begin(); tt != listset2.end(); tt++){
+				listset.insert(TL(*tt, lv));
+			}
+			needChange.clear();
+			num_in_set = listset.size();
+			if(num_in_set >= 10){
+				for(i = 0, ti = listset.begin(); i < 10; ti++){
+					if(ti->id != ID){
+						if(i == 9)
+							cout << ti->id << endl;
+						else
+							cout << ti->id <<","/*<< ti->score << endl*/;
+						i++;
+					}
+				}
+				break;
+			}
+		}
+	}
+}
 
 #define MAX 100
 enum prcsmode {CHR, QMK, STAR};
@@ -199,7 +328,7 @@ void processCreate(Set &idset){
 		cout <<"success"<< endl;
 	}else{
 		cout <<"ID "<< ID <<" exists, ";
-//		listing10(false, ID, idset);
+		listing10(false, ID, idset);
 	}
 }
 
@@ -269,7 +398,7 @@ void processTransfer(customer* user_now, int& TIME_CNT, Set &idset){
 	Set::iterator tmp = idset.find(id_tmp);
 	if(tmp == idset.end()){
 		cout <<"ID "<< ID <<" not found, ";
-//		listing10(true, ID, idset);
+		listing10(true, ID, idset);
 	}else if(num > user_now->dollars()){
 		cout <<"fail, "<< X <<" dollars only in current account"<< endl;
 	}else{
