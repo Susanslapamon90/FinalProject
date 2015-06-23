@@ -64,43 +64,43 @@ class INDEX{
 
 const string strtable = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
 
-void all_digit_change(int h, vector<int> &NC, set<string> &listset2, string &sample){
+void all_digit_change(int h, vector<int> &NC, set<string> &listset2, string &sample, int pos){
 	if(h > NC.size()){
 		listset2.insert(sample);
 		return;
 	}
 	for(int i = 0; i < 62; i++){
-		if(strtable[i] == sample[sample.size()-NC[h-1]])
+		if(strtable[i] == sample[pos-NC[h-1]])
 			continue;
-		sample[sample.size()-NC[h-1]] = strtable[i];
-		all_digit_change(h+1, NC, listset2, sample);
+		sample[pos-NC[h-1]] = strtable[i];
+		all_digit_change(h+1, NC, listset2, sample, pos);
 	}
 }
 
-void pick_or_not(int n, int h, vector<int> &NC, set<string> &listset2, string sample){
+void pick_or_not(int n, int h, vector<int> &NC, set<string> &listset2, string sample, int pos){
 	if(n < h && n != 0){
 			//cout << "fuck!!!" << endl;
 		return;
 	}else if(n == 0){
 			//cout << "yeah!!!" << endl;
-		all_digit_change(1, NC, listset2, sample);
+		all_digit_change(1, NC, listset2, sample, pos);
 		return;
 	}
-	pick_or_not(n, h+1, NC, listset2, sample); // not pick
+	pick_or_not(n, h+1, NC, listset2, sample, pos); // not pick
 	NC.push_back(h); 
-	pick_or_not(n-h, h+1, NC, listset2, sample); // pick
+	pick_or_not(n-h, h+1, NC, listset2, sample, pos); // pick
 	//cout << "fuck yeah!!!" << endl;
 }
 
-void extend(int n_len, int n_var, set<string> &listset2, string ID){
+void extend(int n_len, int n_var, set<string> &listset2, string ID, int pos){
 	if(n_len == 0){
 		vector<int> needChange; 
-		pick_or_not(n_var, 1, needChange, listset2, ID);
+		pick_or_not(n_var, 1, needChange, listset2, ID, pos);
 		return;
 	}
 	for(int i = 0; i < 62; i++){
 		string ex_string = ID + strtable[i];
-		extend(n_len - 1, n_var, listset2, ex_string);
+		extend(n_len - 1, n_var, listset2, ex_string, pos);
 	}
 }
 
@@ -140,16 +140,16 @@ void listing10(bool exist, string ID, set<INDEX> &idset){
 				n_var = lv - n_len;
 				if(ID.size() > n_len){
 					string cut_string(ID, 0, ID.size()-n_len);
-					pick_or_not(n_var, 1, needChange, listset2, cut_string);
+					pick_or_not(n_var, 1, needChange, listset2, cut_string, cut_string.size());
 				}else
 					break;
 			}
 			/* same length */
-				pick_or_not(lv, 1, needChange, listset2, ID);
+				pick_or_not(lv, 1, needChange, listset2, ID, ID.size());
 			/* extend length */
 			for(n_len = 1, cnt = 1; n_len <= lv; cnt++, n_len+=cnt){
 				n_var = lv - n_len;
-				extend(n_len, n_var, listset2, ID);
+				extend(n_len, n_var, listset2, ID, ID.size());
 			}
 			clear_exist_ID(listset2, idset);
 			num_in_set = listset2.size();
