@@ -87,7 +87,10 @@ void listing10(bool exist, string ID, Set &idset){
 		}
 		for(i = 0, ti = listset.begin(); i < 10 && ti != listset.end(); ti++){
 			if(ti->score != 0){
-				cout << ti->id <<", "<< ti->score << endl;
+				if(i == 9)
+					cout << ti->id << endl;
+				else
+					cout << ti->id <<","/*<< ti->score << endl*/;
 				i++;
 			}
 		}
