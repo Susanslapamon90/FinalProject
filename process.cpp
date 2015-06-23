@@ -128,7 +128,7 @@ void processSearch(customer* user_now, Set &idset){
 	INDEX<THistory> id_temp(ID,cus_temp);
 	Set::iterator tmp = idset.find(id_temp);
 	if(tmp == idset.end())
-		cout <<"ID "<< ID <<" not found"<< endl;
+		printf("no record\n");
 	else
 		user_now->search(ID);
 }
