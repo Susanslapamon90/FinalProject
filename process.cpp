@@ -26,7 +26,7 @@ public:
 const string strtable = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
 
 void all_digit_change(int h, vector<int> &NC, set<string> &listset2, string &sample, int pos, const string origin){
-	if(h > NC.size()){
+	if(h > (int)NC.size()){
 		listset2.insert(sample);
 		return;
 	}
@@ -40,7 +40,7 @@ void all_digit_change(int h, vector<int> &NC, set<string> &listset2, string &sam
 
 void pick_or_not(int n, int h, vector<int> NC, set<string> &listset2, string sample, int pos){
 	if(n < h && n != 0){
-			//cout << "fuck!!!" << endl;
+		
 		return;
 	}else if(n == 0){
 			//cout << "yeah!!!" << endl;
@@ -48,7 +48,7 @@ void pick_or_not(int n, int h, vector<int> NC, set<string> &listset2, string sam
 		return;
 	}
 	pick_or_not(n, h+1, NC, listset2, sample, pos); // not pick
-	NC.push_back(h); 
+	NC.push_back(h);
 	pick_or_not(n-h, h+1, NC, listset2, sample, pos); // pick
 	//cout << "fuck yeah!!!" << endl;
 }
@@ -87,7 +87,7 @@ void listing10(bool exist, string ID, Set &idset){
 		}
 		for(i = 0, ti = listset.begin(); i < 10 && ti != listset.end(); ti++){
 			if(ti->score != 0){
-				if(i == 9 || i == listset.size() - 1){
+				if(i == 9 || i == (int)listset.size() - 1){
 					cout << ti->id << endl;
 					break;
 				}
@@ -105,7 +105,7 @@ void listing10(bool exist, string ID, Set &idset){
 			/* shorten length */
 			for(n_len = 1, cnt = 1; n_len <= lv; cnt++, n_len+=cnt){
 				n_var = lv - n_len;
-				if(ID.size() > cnt){
+				if((int)ID.size() > cnt){
 					string cut_string(ID, 0, ID.size()-cnt);
 					pick_or_not(n_var, 1, needChange, listset2, cut_string, cut_string.size());
 				}else
@@ -166,7 +166,7 @@ void FIND(string user, string test, Set& idset){
 	// process the search string
 	if(test[0] == '*')
 		top_exist = false; 
-	for(int i = 0; i < test.size(); i++){ 
+	for(int i = 0; i <(int) test.size(); i++){ 
 		if(test[i] == '*'){
 			if(mode == -1){
 				mode = STAR;
@@ -216,7 +216,7 @@ void FIND(string user, string test, Set& idset){
 	}*/
 	if(all_qmk){
 		for(si = idset.begin(); si != idset.end(); si++){
-			if((si->id).size() == D[0]){
+			if((int)(si->id).size() == D[0]){
 				cout << (si->id) << endl;
 				found = true;
 			}
@@ -241,10 +241,10 @@ void FIND(string user, string test, Set& idset){
 					break;
 				}
 				if(fi == fragment.begin()){ // check top
-					if(top_exist && current < D[0]){
+					if(top_exist && (int)current < D[0]){
 						start = current+1;
 						continue;
-					}else if(top_exist && current > D[0]){
+					}else if(top_exist && (int)current > D[0]){
 						top_accord = false;
 						break;
 					}
@@ -271,10 +271,10 @@ void FIND(string user, string test, Set& idset){
 					}
 					break;
 				}else{ // check fragment after ?
-					if(current-last < D[count]){
+					if((int)(current-last) < D[count]){
 						start = current+1;
 						continue;
-					}else if(current-last > D[count]){
+					}else if((int)(current-last) > D[count]){
 						mid_accord = false;
 						break;
 					}
@@ -348,6 +348,7 @@ void processDelete(Set &idset){
 		cout <<"wrong password"<< endl;
 	else {
 		(*tmp).cu_ptr->deletehistory();
+		delete (*tmp).cu_ptr;
 		idset.erase(tmp);
 		cout <<"success"<< endl;
 	}
