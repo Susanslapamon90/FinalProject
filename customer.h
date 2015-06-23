@@ -66,6 +66,9 @@ public:
 		history.hsearch(ID);
 		return;
 	}
+	void deletehistory(){
+		history.hdelete();
+	}
 };
 
 

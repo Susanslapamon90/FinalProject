@@ -50,6 +50,7 @@ void processDelete(Set &idset){
 	else if(!tmp-> cu_ptr -> authenticated(PW))
 		cout <<"wrong password"<< endl;
 	else {
+		(*tmp).cu_ptr->deletehistory();
 		idset.erase(tmp);
 		cout <<"success"<< endl;
 	}
@@ -111,7 +112,7 @@ void processTransfer(customer* user_now, int& TIME_CNT, Set &idset){
 	}else{
 		user_now->transfer(tmp->cu_ptr, num, TIME_CNT);
 		X = user_now->dollars();
-		cout << "sucess, "<< X <<" dollars left in current account"<< endl;
+		cout << "success, "<< X <<" dollars left in current account"<< endl;
 		TIME_CNT++;
 	}
 }
