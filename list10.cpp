@@ -139,8 +139,8 @@ void listing10(bool exist, string ID, set<INDEX> &idset){
 			/* shorten length */
 			for(n_len = 1, cnt = 1; n_len <= lv; cnt++, n_len+=cnt){
 				n_var = lv - n_len;
-				if(ID.size() > n_len){
-					string cut_string(ID, 0, ID.size()-n_len);
+				if(ID.size() > cnt){
+					string cut_string(ID, 0, ID.size()-cnt);
 					pick_or_not(n_var, 1, needChange, listset2, cut_string, cut_string.size());
 				}else
 					break;

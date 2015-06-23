@@ -116,12 +116,12 @@ void listing10(string ID,int score){
 		set<string>::iterator tt;
 		vector<int> needChange;
 		int num_in_set = listset2.size(), lv, n_len, n_var, cnt;
-		for(lv = score; lv <= score; lv++){
+		for(lv = 1; lv <= score; lv++){
 			/* shorten length */
 			for(n_len = 1, cnt = 1; n_len <= lv; cnt++, n_len+=cnt){
 				n_var = lv - n_len;
-				if(ID.size() > n_len){
-					string cut_string(ID, 0, ID.size()-n_len);
+				if(ID.size() > cnt){
+					string cut_string(ID, 0, ID.size()-cnt);
 					pick_or_not(n_var, 1, needChange, listset2, cut_string, cut_string.size());
 				}else
 					break;
