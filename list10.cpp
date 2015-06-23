@@ -77,7 +77,7 @@ void all_digit_change(int h, vector<int> &NC, set<string> &listset2, string &sam
 	}
 }
 
-void pick_or_not(int n, int h, vector<int> &NC, set<string> &listset2, string sample/*, int pos*/){
+void pick_or_not(int n, int h, vector<int> NC, set<string> &listset2, string sample/*, int pos*/){
 	if(n < h && n != 0){
 			//cout << "fuck!!!" << endl;
 		return;
@@ -108,7 +108,7 @@ void clear_exist_ID(set<string> &listset2, set<INDEX> idset){
 	set<string>::iterator ti;
 	for(ti = listset2.begin(); ti != listset2.end(); ti++){
 		if(idset.find(INDEX(*ti)) != idset.end()){
-			cout <<"clear "<< *ti << endl;
+			//cout <<"clear "<< *ti << endl;
 			listset2.erase(ti);
 		}
 	}
@@ -156,6 +156,7 @@ void listing10(bool exist, string ID, set<INDEX> &idset){
 			for(tt = listset2.begin(); tt != listset2.end(); tt++){
 				listset.insert(TL(*tt, lv));
 			}
+			needChange.clear();
 			num_in_set = listset2.size();
 			if(num_in_set >= 10){
 				for(i = 0, tt = listset2.begin(); i < 10; tt++){
