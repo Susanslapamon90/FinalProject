@@ -4,12 +4,14 @@ using namespace std;
 enum commandList {LOGIN, CREATE, DELETE, MERGE, 
 		  DEPOSIT, WITHDRAW, TRANSFER, FIND, SEARCH};
 int findCommand(char *command){
-	char commandString[9][10] = {"login", "create", "delete", "merge", 
-		"deposit", "withdraw", "transfer", "find", "search"};
+	char commandString[10][10] = {"login", "create", "delete", "merge", 
+		"deposit", "withdraw", "transfer", "find", "search","exit"};
 	int i;
 	for(i = 0; i < 9; i++)
         	if(strcmp(command, commandString[i]) == 0)
-            return i;
+            		return i;
+	if(strcmp(command,commandString[9]) == 0)
+		exit(-1);
     return -1;
 }
 
@@ -20,8 +22,7 @@ int main(int argc, char **argv){
 	set<INDEX<THistory> > idset;
 	
 	while(1){
-		scanf("%s", command);
-		
+		scanf("%s", command);	
 		switch(findCommand(command)){
             		case LOGIN:
             			processLogin(idset,&USER_NOW);
