@@ -12,3 +12,5 @@ rm:
 	rm *.cpp~ *.h~ Makefile~
 name:
 	g++ $(CPPFLAGS) $(GENERATE) -o ID_generator
+list:
+	g++ $(CPPFLAGS) list10.cpp -o list_10_non_exist

@@ -10,7 +10,7 @@ int findCommand(char *command){
 	for(i = 0; i < 9; i++)
         	if(strcmp(command, commandString[i]) == 0)
             return i;
-    exit(-1);
+    return -1;
 }
 
 int main(int argc, char **argv){
@@ -52,6 +52,7 @@ int main(int argc, char **argv){
                 		break;
 			default:
 				cout << "wrong command" << endl;
+				break;
         	}
 //		if(USER_NOW == NULL)
 //			cout << "null now" <<endl;
