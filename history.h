@@ -84,6 +84,6 @@ public:
 		for(i = stilist.begin(); i != stilist.end(); i++){
 			delete (*i);
 			(*i) = NULL;
-		}
+		}	
 	}
 };           
