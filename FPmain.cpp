@@ -21,8 +21,8 @@ int main(int argc, char **argv){
 	char command[10];
 	set<INDEX<THistory> > idset;
 	
-	while(1){
-		scanf("%s", command);	
+	for(int i = 0;; i++){
+		scanf("%s", command);
 		switch(findCommand(command)){
             		case LOGIN:
             			processLogin(idset,&USER_NOW);

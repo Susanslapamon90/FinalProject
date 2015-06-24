@@ -329,8 +329,8 @@ void processCreate(Set &idset){
 	if(idset.find(id_tmp) == idset.end()){
 		INDEX<THistory> *new_index = new INDEX<THistory>(ID,PW);
 		idset.insert(*new_index);
-	// others require the DS of our ID web
 		cout <<"success"<< endl;
+		delete new_index;
 	}else{
 		cout <<"ID "<< ID <<" exists, ";
 		listing10(false, ID, idset);
@@ -373,7 +373,8 @@ void processMerge(Set &idset){
 		tmp1->cu_ptr->mergehistory(*(tmp2->cu_ptr));
 		X = tmp1->cu_ptr->dollars();
 		cout <<"success, "<< ID1 <<" has "<< X <<" dollars"<< endl;
-		idset.erase(id_tmp2);
+		delete (*tmp2).cu_ptr;
+		idset.erase(tmp2);
 	}
 }
 
