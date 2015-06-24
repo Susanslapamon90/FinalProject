@@ -347,7 +347,7 @@ void processDelete(Set &idset){
 	else if(!tmp-> cu_ptr -> authenticated(PW))
 		cout <<"wrong password"<< endl;
 	else {
-		(*tmp).cu_ptr->deletehistory();
+//		(*tmp).cu_ptr->deletehistory();
 		delete (*tmp).cu_ptr;
 		idset.erase(tmp);
 		cout <<"success"<< endl;
