@@ -1,0 +1,9 @@
+create a 1
+create b 1
+create c 1
+login a 1
+deposit 10
+transfer b 1
+transfer c 2
+login c 1
+merge a 1 b 1
