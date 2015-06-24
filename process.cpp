@@ -143,14 +143,14 @@ void listing10(bool exist, string ID, Set &idset){
 #define MAX 100
 enum prcsmode {CHR, QMK, STAR};
 
-void FIND(string user, string test, Set& idset){
+void FIND(string user, string test, Set& idset,vector<string>&putstring){
 	int mode = -1;
 	bool found = false;
 	Set::iterator si;
 	if(test.find("*") == string::npos && test.find("?") == string::npos){
 		for(si = idset.begin(); si != idset.end(); si++){
 			if(test == si->id){
-				cout << si->id << endl;
+				putstring.push_back(si->id);
 				found = true;
 			}
 		}
@@ -217,7 +217,7 @@ void FIND(string user, string test, Set& idset){
 	if(all_qmk){
 		for(si = idset.begin(); si != idset.end(); si++){
 			if((int)(si->id).size() == D[0]){
-				cout << (si->id) << endl;
+				putstring.push_back(si->id);
 				found = true;
 			}
 		}
@@ -296,7 +296,7 @@ void FIND(string user, string test, Set& idset){
 		}
 		if(can_print && si->id != user){
 			/* print out the according word */
-			cout << (si->id) << endl;
+			putstring.push_back(si->id);
 			found = true;
 		}
 	}
@@ -418,7 +418,15 @@ void processTransfer(customer* user_now, int& TIME_CNT, Set &idset){
 void processFind(customer* user_now, Set &idset){
 	string wild_card_ID;
 	cin >> wild_card_ID;
-	FIND(user_now->ID, wild_card_ID, idset);
+	vector<string>putstring;
+	FIND(user_now->ID, wild_card_ID, idset,putstring);
+	if(putstring.size() == 0)
+		return;
+	int k = (int)putstring.size() - 1, i = 0;
+	for(i = 0; i < k; i++)
+		cout << putstring[i] << ",";
+	cout << putstring[i]<<endl;
+
 }
 
 void processSearch(customer* user_now, Set &idset){
