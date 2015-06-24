@@ -21,7 +21,7 @@ int main(int argc, char **argv){
 	char command[10];
 	set<INDEX<THistory> > idset;
 	
-	for(int i = 0;; i++){
+	for(int i = 0; i < 20614; i++){
 		scanf("%s", command);
 		switch(findCommand(command)){
             		case LOGIN:
