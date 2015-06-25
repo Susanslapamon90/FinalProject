@@ -4,6 +4,7 @@
 #include <cstdlib>
 #include <ctime>
 #include <set>
+#include <stdio.h>
 using namespace std;
 
 const string table = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
