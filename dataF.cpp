@@ -55,13 +55,13 @@ void printMerge(set<string> &stringset){
 		int cnt = 1;
 		while(1){
 			it++;	cnt++;
-			if(rand() % ((int)stringset.size()) == 0
+			if(rand() % ((int)stringset.size()/3) == 0
 				|| cnt == (int)stringset.size()) break;
 		}
 		cnt = 1;
 		while(1){
 			it2++;	cnt++;
-			if(rand() % (int)stringset.size() == 0
+			if(rand() % ((int)stringset.size()/3) == 0
 				|| cnt == (int)stringset.size()) break;
 		}
 		cout << "merge " << *it <<" "<< *it <<" "<< *it2 <<" "<< *it2 << endl;
@@ -94,17 +94,61 @@ void printTransfer(set<string> &stringset){
 		int cnt = 1;
 		while(1){
 			it++;	cnt++;
-			if(rand() % ((int)stringset.size()) == 0
+			if(rand() % ((int)stringset.size()/3) == 0
 				|| cnt == (int)stringset.size()) break;
 		}
 		cnt = 1;
 		while(1){
 			it2++;	cnt++;
-			if(rand() % ((int)stringset.size()) == 0
+			if(rand() % ((int)stringset.size()/3) == 0
 				|| cnt == (int)stringset.size()) break;
 		}
 			cout << "login " << *it <<" "<< *it << endl; 
 			cout << "transfer " << *it2 <<" "<< money << endl;
+	}
+}
+
+void printFind(set<string> &stringset){
+	int n, i;
+	cin >> n;
+	set<string>::iterator it;
+	
+	for(i = 0, it = stringset.begin(); i < n && it != stringset.end(); i++, it++){
+		string s;
+		int kind = rand() % 3;
+		switch(kind){
+			case 0:
+				s += table[rand() % 62];
+				break;
+			case 1:
+				s += "*";
+				break;
+			case 2:
+				s += "?";
+				break;
+		}
+		bool stop = false;
+		while(s.size() <= 5){
+			if(s[s.size()-1] == '*')
+				s += table[rand() % 62];
+			else if(s[s.size()-1] == '?'){
+				if(rand() % 2 == 0)
+					s += table[rand() % 62];
+				else
+					s += '?';
+			}else{
+				if(rand() % 3 == 0)
+					s += table[rand() % 62];
+				else if(rand() % 2 == 0)
+					s += '?';
+				else
+					s += '*';
+			}
+			if(rand() % 3 == 0) break;
+		}
+		cout << "login " << *it <<" "<< *it << endl; 
+		cout << "find " << s << endl;
+		s.clear();
 	}
 }
 
@@ -117,7 +161,7 @@ void printSearch(set<string> &stringset){
 		int cnt = 1;
 		while(1){
 			it2++;	cnt++;
-			if(rand() % ((int)stringset.size()) == 0
+			if(rand() % ((int)stringset.size()/3) == 0
 				|| cnt == (int)stringset.size()) break;
 		}
 		cout << "login " << *it <<" "<< *it << endl; 
@@ -153,9 +197,9 @@ int main(int argc, char **argv){
             case TRANSFER:
             	printTransfer(stringset);
                 break;
-            /*case FIND:
-            	printFind(USER_NOW,idset);
-                break;*/
+            case FIND:
+            	printFind(stringset);
+                break;
             case SEARCH:
             	printSearch(stringset);
                 break;
