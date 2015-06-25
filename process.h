@@ -1,5 +1,5 @@
 #include "customer.h"
-#include "history.h"
+#include "history2.h"
 
 using namespace std;
 
