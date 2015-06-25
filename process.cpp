@@ -433,10 +433,5 @@ void processFind(customer* user_now, Set &idset){
 void processSearch(customer* user_now, Set &idset){
 	string ID;
 	cin >> ID;
-	INDEX<THistory> id_temp(ID,cus_temp);
-	Set::iterator tmp = idset.find(id_temp);
-	if(tmp == idset.end())
-		printf("no record\n");
-	else
-		user_now->search(ID);
+	user_now->search(ID);
 }
