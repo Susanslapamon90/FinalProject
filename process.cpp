@@ -101,7 +101,20 @@ void listing10(bool exist, string ID, Set &idset){
 		set<string>::iterator tt;
 		vector<int> needChange;
 		int num_in_set = listset2.size(), lv, n_len, n_var, cnt;
-		for(lv = 1; num_in_set < 10; lv++){
+/* score = 1 start */
+		string strtmp(ID, 0, ID.size()-1);
+		listset2.insert(strtmp);
+		for(int i = 0; i < 62; i++){
+			if(strtable[i] > ID[ID.size()-1]) break;
+			listset2.insert(strtmp + strtable[i]);
+			if(listset2.size() >= 10) return;
+		}
+		for(int i = 0; i < 62; i++){
+			listset2.insert(ID + strtable[i]);
+			if(listset2.size() >= 10) return;
+		}
+/* score = 1 end */
+		for(lv = 2; num_in_set < 10; lv++){ // lv = 1 -> lv = 2
 			/* shorten length */
 			for(n_len = 1, cnt = 1; n_len <= lv; cnt++, n_len+=cnt){
 				n_var = lv - n_len;
@@ -426,7 +439,7 @@ void processTransfer(customer* user_now, int& TIME_CNT, Set &idset){
 void processFind(customer* user_now, Set &idset){
 	string wild_card_ID;
 	cin >> wild_card_ID;
-	FIND(user_now->ID, wild_card_ID, idset);
+	//FIND(user_now->ID, wild_card_ID, idset);
 	cout << endl;
 }
 
