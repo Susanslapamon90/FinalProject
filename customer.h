@@ -49,7 +49,7 @@ public:
 		deposit -= money;
 		return;
 	}
-	void mergehistory(Customer id2){
+	void mergehistory(Customer& id2){
 		deposit += id2.deposit;
 		history.hmerge(id2.history, ID);				
 		return;
