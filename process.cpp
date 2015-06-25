@@ -4,8 +4,8 @@ using namespace std;
  
 //typedef set<INDEX<THistory> > Set;
 //typedef Customer<THistory> customer;
-string b = "Hello",c = "fuck";
-customer cus_temp(b,c);
+const string b = "Hello",c = "fuck";
+const customer cus_temp(b,c);
 
 class TL{
 public:
@@ -65,18 +65,24 @@ void extend(int cnt, int n_var, set<string> &listset2, string ID, int pos){
 	}
 }
 
-void clear_exist_ID(set<string> &listset2, Set idset){
+void clear_exist_ID(set<string> &listset2,const Set &idset){
 	set<string>::iterator ti;
+	int i = 0;
 	for(ti = listset2.begin(); ti != listset2.end(); ti++){
 		if(idset.find(INDEX<THistory>(*ti)) != idset.end()){
 			//cout <<"clear "<< *ti << endl;
 			listset2.erase(ti);
 		}
+		else{
+			i++;
+			if(i >= 10)
+				return;
+		}
 	}
 }
 
 
-void listing10(bool exist, string ID, Set &idset){
+void listing10(bool exist, string ID,const Set &idset){
 	int i;
 	Set::iterator si;
 	set<TL> listset;
@@ -85,7 +91,7 @@ void listing10(bool exist, string ID, Set &idset){
 		for(si = idset.begin(); si != idset.end(); si++){
 				listset.insert(TL(si->id, score(ID, si->id)));
 		}
-		for(i = 0, ti = listset.begin(); i < 10 && ti != listset.end(); ti++){
+	for(i = 0, ti = listset.begin(); i < 10 && ti != listset.end(); ti++){
 			if(ti->score != 0){
 				if(i == 9 || i == (int)listset.size() - 1){
 					cout << ti->id << endl;
