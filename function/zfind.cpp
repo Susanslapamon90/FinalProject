@@ -179,7 +179,7 @@ int main(int argc, char** argv){
 	delete tmp;
 	fp.close();
 
-	cout << " #Read in finished" << endl;
+	/*cout << " #Read in finished" << endl;
 	cout << " $From now on, input words to search" << endl;
 	cout << " // word's length Domain : 1 ~ 100" << endl;
 	cout << " // each charater can only be in {0~9, A~Z, a~z, ?, *}" << endl;
@@ -187,12 +187,12 @@ int main(int argc, char** argv){
 	cout << " // * : any number(in Domain or 0) of charaters that can be any of {0~9, A~Z, a~z}" << endl;
 	cout << " // it is invalid to type such as **, *?, ?* " << endl;
 
-	cout << endl << " $Type something to search : ";
+	cout << endl << " $Type something to search : ";*/
 	char cstr[100];
 	while(scanf("%s", cstr) != EOF){
 		bool can_process = true;
 		string *tmp = new string(cstr);
-		if(tmp->size() == 0){
+		/*if(tmp->size() == 0){
 			cout << " #please type something" << endl;
 			continue;			
 		}
@@ -218,13 +218,13 @@ int main(int argc, char** argv){
 				cout << " #there's invalid combination : " << (*tmp)[i-1] << (*tmp)[i] << endl;
 				can_process = false;
 			}
-		}
-		t1 = time(NULL);
+		}*/
+		//t1 = time(NULL);
 		if(can_process)
 			processFind(*tmp, ID);
-		t2 = time(NULL);
-		printf("The reading time is %0ld:%0ld (min:sec)\n", (t2-t1)/60, (t2-t1)%60);
-		cout << "$Type something to search : ";
+		//t2 = time(NULL);
+		//printf("The reading time is %0ld:%0ld (min:sec)\n", (t2-t1)/60, (t2-t1)%60);
+		//cout << "$Type something to search : ";
 	}
 	return 0;
 }

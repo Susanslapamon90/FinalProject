@@ -28,7 +28,7 @@ void gen_rand(int n, set<string> &stringset){
 		string s;
 		s += table[rand() % 62];
 		bool stop = false;
-		while(!stop && s.size() <= 100){
+		while(!stop && s.size() <= 50){
 			s += table[rand() % 62];
 			if(rand() % 10 == 0) stop = true;
 		}
@@ -128,7 +128,6 @@ void printFind(set<string> &stringset){
 				s += "?";
 				break;
 		}
-		bool stop = false;
 		while(s.size() <= 5){
 			if(s[s.size()-1] == '*')
 				s += table[rand() % 62];

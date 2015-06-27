@@ -2,6 +2,7 @@ CPPFLAGS = -std=c++11  -O2 -Wall
 LO = md5.cpp history2.cpp
 OTHER = process.cpp
 ANOTHER = 2process.cpp
+LEINAD = Mprocess.cpp
 GENERATE = num_small_big.cpp
 name = final_project
 name2 = dlte
@@ -13,6 +14,8 @@ all:
 
 try:
 	g++ $(CPPFLAGS) $(LO) $(ANOTHER) F2Pmain.cpp -o trying
+Lei:
+	g++ $(CPPFLAGS) $(LO) $(LEINAD) MFPmain.cpp -o leinad
 rm:
 	rm -rf *.cpp~ *.h~ Makefile~
 name:

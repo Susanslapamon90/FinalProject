@@ -9,44 +9,16 @@
 using namespace std;
 #define MAX 100
 
-class Customer{
-public:
-	int a;
-};
-
-class INDEX{
-	public:
-	string id;
-	Customer *cu_ptr;
-	bool operator < (const INDEX &a)const{return id < a.id;}
-	bool operator > (const INDEX &a)const{return id > a.id;}
-	bool operator == (const INDEX &a)const{return id == a.id;}
-	bool operator == (const string &a)const{return a == id;}
-	/*constructor & destructor*/
-	INDEX(){
-		id = "";
-		cu_ptr = NULL;
-	}
-	INDEX(string st, Customer ptr){
-		id = st;
-		cu_ptr = &ptr;};
-	~INDEX(){
-		id.clear();
-		delete cu_ptr;
-	}
-	// other function
-};
-
 enum prcsmode {CHR, QMK, STAR};
 
-void processFind(string user, string test, set<INDEX>& idset){
+void processFind(string test, set<string>& idset){
 	int mode = -1;
 	bool found = false;
-	set<INDEX>::iterator si;
+	set<string>::iterator si;
 	if(test.find("*") == string::npos && test.find("?") == string::npos){
 		for(si = idset.begin(); si != idset.end(); si++){
-			if(test == si->id){
-				cout << si->id << endl;
+			if(test == *si){
+				cout << *si << endl;
 				found = true;
 			}
 		}
@@ -112,8 +84,8 @@ void processFind(string user, string test, set<INDEX>& idset){
 	}
 	if(all_qmk){
 		for(si = idset.begin(); si != idset.end(); si++){
-			if((si->id).size() == D[0]){
-				cout << (si->id) << endl;
+			if((*si).size() == D[0]){
+				cout << (*si) << endl;
 				found = true;
 			}
 		}
@@ -132,7 +104,7 @@ void processFind(string user, string test, set<INDEX>& idset){
 		for(fi = fragment.begin(), count = 0; fi != fragment.end(); fi++, count++){
 			size_t start = 0, current;
 			while(1){
-				if((current = (si->id).find(*fi, start)) == string::npos){
+				if((current = (*si).find(*fi, start)) == string::npos){
 					find = false;
 					break;
 				}
@@ -145,10 +117,10 @@ void processFind(string user, string test, set<INDEX>& idset){
 						break;
 					}
 					if(fi == fragment.end() - 1 && bottom_exist){ // check bottom
-						if(current+(*fi).size()+bottom_dis < (si->id).size()){
+						if(current+(*fi).size()+bottom_dis < (*si).size()){
 							start = current+1;
 							continue;
-						}else if(current+(*fi).size()+bottom_dis > (si->id).size())
+						}else if(current+(*fi).size()+bottom_dis > (*si).size())
 							bottom_accord = false;
 					}
 					break;
@@ -159,10 +131,10 @@ void processFind(string user, string test, set<INDEX>& idset){
 						continue;
 					}
 					if(fi == fragment.end() - 1 && bottom_exist){ // check bottom
-						if(current+(*fi).size()+bottom_dis < (si->id).size()){
+						if(current+(*fi).size()+bottom_dis < (*si).size()){
 							start = current+1;
 							continue;
-						}else if(current+(*fi).size()+bottom_dis > (si->id).size())
+						}else if(current+(*fi).size()+bottom_dis > (*si).size())
 							bottom_accord = false;
 					}
 					break;
@@ -175,10 +147,10 @@ void processFind(string user, string test, set<INDEX>& idset){
 						break;
 					}
 					if(fi == fragment.end() - 1 && bottom_exist){ // check bottom
-						if(current+(*fi).size()+bottom_dis < (si->id).size()){
+						if(current+(*fi).size()+bottom_dis < (*si).size()){
 							start = current+1;
 							continue;
-						}else if(current+(*fi).size()+bottom_dis > (si->id).size())
+						}else if(current+(*fi).size()+bottom_dis > (*si).size())
 							bottom_accord = false;
 					}
 					break;
@@ -190,9 +162,9 @@ void processFind(string user, string test, set<INDEX>& idset){
 				break;
 			}
 		}
-		if(can_print && si->id != user){
+		if(can_print){
 			/* print out the according word */
-			cout << (si->id) << endl;
+			cout << (*si) << endl;
 			found = true;
 		}
 	}
@@ -201,15 +173,16 @@ void processFind(string user, string test, set<INDEX>& idset){
 }
 
 int main(int argc, char** argv){
-	set<INDEX> ID;
+	time_t t1, t2;
+	set<string> ID;
 	ifstream fp(argv[1]);
-	INDEX *tmp = new INDEX;
-	while(getline(fp, tmp->id))
+	string *tmp = new string;
+	while(getline(fp, *tmp))
 		ID.insert(*tmp);
 	delete tmp;
 	fp.close();
 
-	cout << " #Read in finished" << endl;
+	/*cout << " #Read in finished" << endl;
 	cout << " $From now on, input words to search" << endl;
 	cout << " // word's length Domain : 1 ~ 100" << endl;
 	cout << " // each charater can only be in {0~9, A~Z, a~z, ?, *}" << endl;
@@ -217,12 +190,12 @@ int main(int argc, char** argv){
 	cout << " // * : any number(in Domain or 0) of charaters that can be any of {0~9, A~Z, a~z}" << endl;
 	cout << " // it is invalid to type such as **, *?, ?* " << endl;
 
-	cout << endl << " $Type something to search : ";
+	cout << endl << " $Type something to search : ";*/
 	char cstr[100];
 	while(scanf("%s", cstr) != EOF){
 		bool can_process = true;
 		string *tmp = new string(cstr);
-		if(tmp->size() == 0){
+		/*if(tmp->size() == 0){
 			cout << " #please type something" << endl;
 			continue;			
 		}
@@ -248,13 +221,14 @@ int main(int argc, char** argv){
 				cout << " #there's invalid combination : " << (*tmp)[i-1] << (*tmp)[i] << endl;
 				can_process = false;
 			}
-		}
-		if(can_process){
-			string *user_now = new string;
-			cin >> *user_now; 
-			processFind(*user_now, *tmp, ID);
-		}
-		cout << "$Type something to search : ";
+		}*/
+
+		//t1 = time(NULL);
+		if(can_process)
+			processFind(*tmp, ID);
+		t2 = time(NULL);
+		//printf("The reading time is %0ld:%0ld (min:sec)\n", (t2-t1)/60, (t2-t1)%60);
+		//cout << "$Type something to search : ";
 	}
 	return 0;
 }
