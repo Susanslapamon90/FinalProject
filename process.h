@@ -13,7 +13,7 @@ void processDelete(Trie &idtrie);
 void processMerge(Trie &idtrie);
 void processDeposit(customer* user_now);
 void processWithdraw(customer* user_now);
-void processTransfer(customer* user_now, int &TIME_CNT, Trie &id);
+void processTransfer(customer* user_now, int &TIME_CNT, Trie &idtrie);
 void processFind(customer* user_now, Trie &idtrie);
-void processSearch(customer* user_now, Trie &idtrie);
+void processSearch(customer* user_now);
 

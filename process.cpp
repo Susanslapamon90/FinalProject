@@ -65,11 +65,11 @@ void extend(int cnt, int n_var, set<string> &listset2, string ID, int pos){
 	}
 }
 
-void clear_exist_ID(set<string> &listset2,const Set &idset){
+void clear_exist_ID(set<string> &listset2,Trie &idtrie){
 	set<string>::iterator ti;
 	int i = 0;
 	for(ti = listset2.begin(); ti != listset2.end(); ti++){
-		if(idset.find(INDEX<THistory>(*ti)) != idset.end()){
+		if(idtrie.find(*ti) != NULL){
 			//cout <<"clear "<< *ti << endl;
 			listset2.erase(ti);
 		}
@@ -80,25 +80,48 @@ void clear_exist_ID(set<string> &listset2,const Set &idset){
 		}
 	}
 }
+void violencescore1(set<string> &listset2,const string &ID){
+	string tmp (ID,0,((ID.size())-1));
+	if(ID.size() > 1)
+		listset2.insert(tmp);
+	tmp += '@';
+	int n = tmp.size() - 1;
+	for(int i = 0; i < 62; i ++){
+		tmp[n] = strtable[i];
+		listset2.insert(tmp);
+	}
+	tmp = ID; tmp += '@';
+	n = tmp.size() - 1;
+	for(int i = 0; i < 62; i ++){
+		tmp[n] = strtable[i];
+		listset2.insert(tmp);
+	}
+		listset2.erase(ID);
+}
+void traversal(set<TL> &listset,Trie *idtrie,string & ID){
+	if(idtrie == NULL)
+		return;
+	if(idtrie -> data != NULL)
+		listset.insert(TL(idtrie -> data -> id,score(ID,idtrie -> data -> id)));
+	for(int i = 0; i < 128;i++)
+		traversal(listset,idtrie -> child[i],ID);
+}
 
 
-void listing10(bool exist, string ID,const Set &idset){
+void listing10(bool exist, string ID,Trie &idtrie){
 	int i;
-	Set::iterator si;
 	set<TL> listset;
-	set<TL>::iterator ti;
+	set<TL>::iterator tli;
 	if(exist){
-		for(si = idset.begin(); si != idset.end(); si++){
-				listset.insert(TL(si->id, score(ID, si->id)));
-		}
-	for(i = 0, ti = listset.begin(); i < 10 && ti != listset.end(); ti++){
-			if(ti->score != 0){
+		traversal(listset,&idtrie,ID);
+	for(i = 0, tli = listset.begin(); i < 10 && tli != listset.end(); tli++){
+			if(tli->score != 0){
 				if(i == 9 || i == (int)listset.size() - 1){
-					cout << ti->id << endl;
+					cout << tli->id << endl;
 					break;
 				}
 				else
-					cout << ti->id <<","/*<< ti->score << endl*/;
+					cout << tli->id <<","/*<< ti->score << endl*/;
 				i++;
 			}
 		}
@@ -107,19 +130,21 @@ void listing10(bool exist, string ID,const Set &idset){
 		set<string>::iterator tt;
 		vector<int> needChange;
 		int num_in_set = listset2.size(), lv, n_len, n_var, cnt;
-/* score = 1 start */
-		string strtmp(ID, 0, ID.size()-1);
-		listset2.insert(strtmp);
-		for(int i = 0; i < 62; i++){
-			if(strtable[i] > ID[ID.size()-1]) break;
-			listset2.insert(strtmp + strtable[i]);
-			if(listset2.size() >= 10) return;
+		/*violence score = 1*/
+		violencescore1(listset2,ID);
+		clear_exist_ID(listset2,idtrie);
+		num_in_set = listset2.size();
+		if(num_in_set >= 10){
+			int i;
+			for(i = 0, tt = listset2.begin(); i < 9; tt++){
+				cout << *tt <<","/*<< ti->score << endl*/;
+				i++;
+			}
+			cout << *tt <<endl;
+			return;
 		}
-		for(int i = 0; i < 62; i++){
-			listset2.insert(ID + strtable[i]);
-			if(listset2.size() >= 10) return;
-		}
-/* score = 1 end */
+		cout << "2 "<<endl;
+		/* score = 1 end */
 		for(lv = 2; num_in_set < 10; lv++){ // lv = 1 -> lv = 2
 			/* shorten length */
 			for(n_len = 1, cnt = 1; n_len <= lv; cnt++, n_len+=cnt){
@@ -137,19 +162,19 @@ void listing10(bool exist, string ID,const Set &idset){
 				n_var = lv - n_len;
 				extend(cnt, n_var, listset2, ID, ID.size());
 			}
-			clear_exist_ID(listset2, idset);
+			clear_exist_ID(listset2, idtrie);
 			for(tt = listset2.begin(); tt != listset2.end(); tt++){
 				listset.insert(TL(*tt, lv));
 			}
 			needChange.clear();
 			num_in_set = listset.size();
 			if(num_in_set >= 10){
-				for(i = 0, ti = listset.begin(); i < 10; ti++){
-					if(ti->id != ID){
+				for(i = 0, tli = listset.begin(); i < 10; tli++){
+					if(tli->id != ID){
 						if(i == 9)
-							cout << ti->id << endl;
+							cout << tli->id << endl;
 						else
-							cout << ti->id <<","/*<< ti->score << endl*/;
+							cout << tli->id <<","/*<< ti->score << endl*/;
 						i++;
 					}
 				}
@@ -162,7 +187,7 @@ void listing10(bool exist, string ID,const Set &idset){
 #define MAX 100
 enum prcsmode {CHR, QMK, STAR};
 
-void FIND(string user, string test, Set& idset){
+/*void FIND(string user, string test, Set& idset){
 	int mode = -1;
 //	bool found = false;
 	bool firstprint = true;
@@ -233,9 +258,9 @@ void FIND(string user, string test, Set& idset){
 	vector<string>::iterator fi;
 	int count = 0;
 	
-	/*for(fi = fragment.begin(), count = 0; fi != fragment.end(); fi++, count++){
-		cout << (*fi) << ", " << D[count] << ", " << endl;
-	}*/
+//	for(fi = fragment.begin(), count = 0; fi != fragment.end(); fi++, count++){
+//		cout << (*fi) << ", " << D[count] << ", " << endl;
+//	}
 	if(all_qmk){
 		for(si = idset.begin(); si != idset.end(); si++){
 			if((int)(si->id).size() == D[0]){
@@ -320,7 +345,7 @@ void FIND(string user, string test, Set& idset){
 			}
 		}
 		if(can_print && si->id != user){
-			/* print out the according word */
+//			 print out the according word 
 			if(firstprint){
 				cout << si -> id;
 				firstprint = false;
@@ -330,78 +355,78 @@ void FIND(string user, string test, Set& idset){
 		}
 	}
 }
-
-void processLogin(Set& idset,customer** user_now){
+*/
+void processLogin(Trie& idtrie,customer** user_now){
 	bool success = false;
 	string ID, PW;
 	cin >> ID >> PW;
-	INDEX<THistory> id_tmp(ID,cus_temp);
-	Set::iterator tmp = idset.find(id_tmp);
-	if(tmp == idset.end())
+//	INDEX<THistory> id_tmp(ID,cus_temp);
+	Trie* tmp = idtrie.find(ID);
+	if(tmp == NULL)
 		cout <<"ID "<< ID <<" not found"<< endl;
-	else if(! tmp-> cu_ptr -> authenticated(PW))
+	else if(! tmp -> data -> cu_ptr -> authenticated(PW)){
 		cout <<"wrong password"<< endl;
+	}
 	else {
 		success = true;
 		cout <<"success"<< endl;
 	}
 	if(success)
-		*user_now = (tmp -> cu_ptr);
+		*user_now = (tmp ->data-> cu_ptr);
 }
 
-void processCreate(Set &idset){
+void processCreate(Trie &idtrie){
 	string ID, PW;
 	cin >> ID >> PW;
 	INDEX<THistory> id_tmp(ID,cus_temp);
-	if(idset.find(id_tmp) == idset.end()){
+	if(idtrie.find(ID) == NULL){
 		INDEX<THistory> *new_index = new INDEX<THistory>(ID,PW);
-		idset.insert(*new_index);
+		idtrie.insert(ID,*new_index);
 		cout <<"success"<< endl;
-		delete new_index;
 	}else{
 		cout <<"ID "<< ID <<" exists, ";
-		listing10(false, ID, idset);
+		listing10(false, ID, idtrie);
 	}
 }
 
-void processDelete(Set &idset){
+void processDelete(Trie &idtrie){
 	string ID, PW;
 	cin >> ID >> PW;
 	INDEX<THistory> id_temp(ID,cus_temp);
-	Set::iterator tmp = idset.find(id_temp);
-	if(tmp == idset.end())
+	Trie* tmp = idtrie.find(ID);
+	if(tmp == NULL)
 		cout <<"ID "<< ID <<" not found"<< endl;
-	else if(!tmp-> cu_ptr -> authenticated(PW))
+	else if(!tmp-> data ->  cu_ptr -> authenticated(PW))
 		cout <<"wrong password"<< endl;
 	else {
 //		(*tmp).cu_ptr->deletehistory();
-		delete (*tmp).cu_ptr;
-		idset.erase(tmp);
+		delete tmp -> data -> cu_ptr;
+		idtrie.erase(ID);
 		cout <<"success"<< endl;
 	}
 	return;
 }
-void processMerge(Set &idset){
+void processMerge(Trie &idtrie){
 	unsigned long long X = 0;
 	string ID1, ID2, PW1, PW2;
 	cin >> ID1 >> PW1 >> ID2 >> PW2;
-	INDEX<THistory> id_tmp1(ID1,cus_temp),id_tmp2(ID2,cus_temp);
-	Set::iterator tmp1 = idset.find(id_tmp1);
-	Set::iterator tmp2 = idset.find(id_tmp2);
-	if(tmp1 == idset.end())
+//	INDEX<THistory> id_tmp1(ID1,cus_temp),id_tmp2(ID2,cus_temp);
+	Trie* tmp1 = idtrie.find(ID1);
+	Trie* tmp2 = idtrie.find(ID2);
+	if(tmp1 == NULL)
 		cout <<"ID "<< ID1 <<" not found"<< endl;
-	else if(tmp2 == idset.end())
+	else if(tmp2 == NULL)
 		cout <<"ID "<< ID2 <<" not found"<< endl;
-	else if(!tmp1-> cu_ptr -> authenticated(PW1))
+	else if(!tmp1-> data-> cu_ptr -> authenticated(PW1))
 		cout <<"wrong password1"<< endl;
-	else if(!tmp2->cu_ptr -> authenticated(PW2))
+	else if(!tmp2-> data ->cu_ptr -> authenticated(PW2))
 		cout <<"wrong password2"<< endl;
 	else {
-		tmp1->cu_ptr->mergehistory(*(tmp2->cu_ptr));
-		X = tmp1->cu_ptr->dollars();
+		tmp1-> data ->cu_ptr->mergehistory(*(tmp2-> data ->cu_ptr));
+		X = tmp1-> data ->cu_ptr->dollars();
 		cout <<"success, "<< ID1 <<" has "<< X <<" dollars"<< endl;
-		delete (*tmp2).cu_ptr;
-		idset.erase(tmp2);
+		delete (*tmp2).data -> cu_ptr;
+		idtrie.erase(ID2);
 	}
 }
 
@@ -424,32 +449,31 @@ void processWithdraw(customer* user_now){
 	}
 }
 
-void processTransfer(customer* user_now, int& TIME_CNT, Set &idset){
+void processTransfer(customer* user_now, int& TIME_CNT, Trie &idtrie){
 	unsigned long long num = 0, X = user_now->dollars();
 	string ID;
 	cin >>  ID >> num;
-	INDEX<THistory> id_tmp(ID,cus_temp);
-	Set::iterator tmp = idset.find(id_tmp);
-	if(tmp == idset.end()){
+	Trie *tmp = idtrie.find(ID);
+	if(tmp == NULL){
 		cout <<"ID "<< ID <<" not found, ";
-		listing10(true, ID, idset);
+		listing10(true, ID, idtrie);
 	}else if(num > user_now->dollars()){
 		cout <<"fail, "<< X <<" dollars only in current account"<< endl;
 	}else{
-		user_now->transfer(tmp->cu_ptr, num, TIME_CNT);
+		user_now->transfer(tmp-> data ->cu_ptr, num, TIME_CNT);
 		X = user_now->dollars();
 		cout << "success, "<< X <<" dollars left in current account"<< endl;
 		TIME_CNT++;
 	}
 }
-void processFind(customer* user_now, Set &idset){
+void processFind(customer* user_now,Trie &idtrie){
 	string wild_card_ID;
 	cin >> wild_card_ID;
 	//FIND(user_now->ID, wild_card_ID, idset);
 	cout << endl;
 }
 
-void processSearch(customer* user_now, Set &idset){
+void processSearch(customer* user_now){
 	string ID;
 	cin >> ID;
 	user_now->search(ID);

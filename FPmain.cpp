@@ -19,23 +19,23 @@ int main(int argc, char **argv){
 	Customer<THistory>* USER_NOW = NULL;
 	int TIME_CNT = 0; /* for history */
 	char command[10];
-	set<INDEX<THistory> > idset;
+	trie<INDEX<THistory> > idtrie;
 	
 //	for(int i = 0; i < 20614; i++){
 //		scanf("%s",command);
 	while(scanf("%s", command) != EOF){	
 		switch(findCommand(command)){
             		case LOGIN:
-            			processLogin(idset,&USER_NOW);
+            			processLogin(idtrie,&USER_NOW);
                 		break;
             		case CREATE:
-            			processCreate(idset);
+            			processCreate(idtrie);
                 		break;
             		case DELETE:
-                		processDelete(idset);
+                		processDelete(idtrie);
                 		break;
             		case MERGE:
-				processMerge(idset);
+				processMerge(idtrie);
                 		break;
             		case DEPOSIT:
                 		processDeposit(USER_NOW);
@@ -44,13 +44,13 @@ int main(int argc, char **argv){
             			processWithdraw(USER_NOW);
                 		break;
             		case TRANSFER:
-            			processTransfer(USER_NOW,TIME_CNT,idset);
+            			processTransfer(USER_NOW,TIME_CNT,idtrie);
                 		break;
             		case FIND:
-            			processFind(USER_NOW,idset);
+            			processFind(USER_NOW,idtrie);
                 		break;
             		case SEARCH:
-            			processSearch(USER_NOW,idset);
+            			processSearch(USER_NOW);
                 		break;
 			default:
 				cout << "wrong command" << endl;
