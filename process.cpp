@@ -456,7 +456,7 @@ void processTransfer(customer* user_now, int& TIME_CNT, Trie &idtrie){
 	Trie *tmp = idtrie.find(ID);
 	if(tmp == NULL){
 		cout <<"ID "<< ID <<" not found, ";
-		listing10(true, ID, idtrie);
+		//listing10(true, ID, idtrie);
 	}else if(num > user_now->dollars()){
 		cout <<"fail, "<< X <<" dollars only in current account"<< endl;
 	}else{

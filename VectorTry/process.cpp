@@ -440,7 +440,7 @@ void processTransfer(customer* user_now, int& TIME_CNT, Vec &vec){
 	int tmp = find_or(vec[Num],id_tmp);
 	if(tmp < 0){
 		cout <<"ID "<< ID <<" not found, ";
-		listing10(true, ID, vec);
+		//listing10(true, ID, vec);
 	}else if(num > user_now->dollars()){
 		cout <<"fail, "<< X <<" dollars only in current account"<< endl;
 	}else{
