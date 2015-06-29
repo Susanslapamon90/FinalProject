@@ -493,7 +493,7 @@ void processFind(customer* user_now, Set &idset){
 	cout << endl;
 }
 
-void processSearch(customer* user_now, Set &idset){
+void processSearch(customer* user_now){
 	string ID;
 	cin >> ID;
 	user_now->search(ID);

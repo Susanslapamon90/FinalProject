@@ -45,6 +45,11 @@ public:
 		else
 			return id < a.id;
 	}
+	TL& operator=(const TL &a){
+		id = a.id;
+		score = a.score;
+		return *this;
+	}
 	TL(string str, int n){
 		id = str;
 		score = n;
@@ -124,29 +129,34 @@ void violencescore1(set<string> &listset2,const string &ID){
 		listset2.insert(tmp);
 	}
 	listset2.erase(ID);
-
 }
 
 void listing10(bool exist, string &ID, UMap &idumap){
 	int i;
+	//TL *min = new TL("fuck", 100);
 	UMap::iterator mi;
 	set<TL> listset;
+	vector<TL> listvec;
+	vector<TL>::iterator vi, minpos;
 	set<TL>::iterator ti;
 	if(exist){
 		for(mi = idumap.begin(); mi != idumap.end(); mi++){
-				listset.insert(TL(mi->first, score(ID, mi->first)));
+			listvec.push_back(TL(mi->first, score(ID, mi->first)));
 		}
-		for(i = 0, ti = listset.begin(); i < 10 && ti != listset.end(); ti++){
-			if(ti->score != 0){
-				if(i == 9 || i == (int)listset.size() - 1){
-					cout << ti->id << endl;
-					break;
-				}
-				else
-					cout << ti->id <<","/*<< ti->score << endl*/;
-				i++;
+		for(i = 0; i < 10 && i < listvec.size(); i++){
+			for(vi = listvec.begin()+i, minpos = vi; vi != listvec.end(); vi++){
+				if(*vi < *minpos)
+					minpos = vi;
 			}
+			swap(listvec[i], *minpos);
 		}
+		for(i = 0; i < 10 && i < listvec.size(); i++){
+			if(i == 0)
+				cout << listvec[i].id;
+			else
+				cout << ',' << listvec[i].id;
+		}
+		cout << endl;
 	}else{
 		set<string> listset2;
 		set<string>::iterator tt;

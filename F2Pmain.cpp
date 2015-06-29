@@ -1,7 +1,7 @@
 #include "2process.h"
 using namespace std;
 
-enum commandList {LOGIN, CREATE, DELETE, MERGE, 
+/*enum commandList {LOGIN, CREATE, DELETE, MERGE, 
 		  DEPOSIT, WITHDRAW, TRANSFER, FIND, SEARCH};
 int findCommand(char *command){
 	char commandString[10][10] = {"login", "create", "delete", "merge", 
@@ -13,7 +13,7 @@ int findCommand(char *command){
 	if(strcmp(command,commandString[9]) == 0)
 		exit(-1);
     return -1;
-}
+}*/
 
 int main(int argc, char **argv){
 	Customer<THistory>* USER_NOW = NULL;
@@ -23,41 +23,39 @@ int main(int argc, char **argv){
 	
 //	for(int i = 0; i < 20614; i++){
 //		scanf("%s",command);
-	while(scanf("%s", command) != EOF){	
-		switch(findCommand(command)){
-            		case LOGIN:
-            			processLogin(idset,&USER_NOW);
-                		break;
-            		case CREATE:
-            			processCreate(idset);
-                		break;
-            		case DELETE:
-                		processDelete(idset);
-                		break;
-            		case MERGE:
-				processMerge(idset);
-                		break;
-            		case DEPOSIT:
-                		processDeposit(USER_NOW);
-				break;
-			case WITHDRAW:
-            			processWithdraw(USER_NOW);
-                		break;
-            		case TRANSFER:
-            			processTransfer(USER_NOW,TIME_CNT,idset);
-                		break;
-            		case FIND:
-            			processFind(USER_NOW,idset);
-                		break;
-            		case SEARCH:
-            			processSearch(USER_NOW,idset);
-                		break;
-			default:
-				cout << "wrong command" << endl;
-				break;
-        	}
-//		if(USER_NOW == NULL)
-//			cout << "null now" <<endl;
-	}
+	while(scanf("%s", command) != EOF){    
+        switch(command[0]){
+                    case 'l':
+                        processLogin(idset,&USER_NOW);
+                        break;
+                    case 'c':
+                        processCreate(idset);
+                        break;
+                    case 'd':
+                        if(command[2] == 'l')
+                            processDelete(idset);
+                        else
+                            processDeposit(USER_NOW);
+                        break;
+                    case 'm':
+                        processMerge(idset);
+                        break;
+                     case 'w':
+                        processWithdraw(USER_NOW);
+                        break;
+                    case 't':
+                        processTransfer(USER_NOW,TIME_CNT,idset);
+                        break;
+                    case 'f':
+                        processFind(USER_NOW,idset);
+                        break;
+                    case 's':
+                        processSearch(USER_NOW);
+                        break;
+                     default:
+                        cout << "wrong command" << endl;
+                        break;
+            }
+    }
 	return 0;
 }

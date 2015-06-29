@@ -1,7 +1,7 @@
 #include "process.h"
 using namespace std;
 
-enum commandList {LOGIN, CREATE, DELETE, MERGE, 
+/*enum commandList {LOGIN, CREATE, DELETE, MERGE, 
 		  DEPOSIT, WITHDRAW, TRANSFER, FIND, SEARCH};
 int findCommand(char *command){
 	char commandString[10][10] = {"login", "create", "delete", "merge", 
@@ -13,7 +13,7 @@ int findCommand(char *command){
 	if(strcmp(command,commandString[9]) == 0)
 		exit(-1);
     return -1;
-}
+}*/
 
 int main(int argc, char **argv){
 	Customer<THistory>* USER_NOW = NULL;
@@ -24,40 +24,38 @@ int main(int argc, char **argv){
 //	for(int i = 0; i < 20614; i++){
 //		scanf("%s",command);
 	while(scanf("%s", command) != EOF){	
-		switch(findCommand(command)){
-            		case LOGIN:
+		switch(command[0]){
+            		case 'l':
             			processLogin(idtrie,&USER_NOW);
                 		break;
-            		case CREATE:
+            		case 'c':
             			processCreate(idtrie);
                 		break;
-            		case DELETE:
-                		processDelete(idtrie);
+            		case 'd':
+                        if(command[2] == 'l')
+                            processDelete(idtrie);
+                        else
+                            processDeposit(USER_NOW);
                 		break;
-            		case MERGE:
-				processMerge(idtrie);
+            		case 'm':
+				        processMerge(idtrie);
                 		break;
-            		case DEPOSIT:
-                		processDeposit(USER_NOW);
-				break;
-			case WITHDRAW:
+			         case 'w':
             			processWithdraw(USER_NOW);
                 		break;
-            		case TRANSFER:
+            		case 't':
             			processTransfer(USER_NOW,TIME_CNT,idtrie);
                 		break;
-            		case FIND:
+            		case 'f':
             			processFind(USER_NOW,idtrie);
                 		break;
-            		case SEARCH:
+            		case 's':
             			processSearch(USER_NOW);
                 		break;
-			default:
-				cout << "wrong command" << endl;
-				break;
+			         default:
+				        cout << "wrong command" << endl;
+				        break;
         	}
-//		if(USER_NOW == NULL)
-//			cout << "null now" <<endl;
 	}
 	return 0;
 }
