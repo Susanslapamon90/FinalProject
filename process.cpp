@@ -91,7 +91,7 @@ void listing10(bool exist, string ID,const Set &idset){
 		for(si = idset.begin(); si != idset.end(); si++){
 				listset.insert(TL(si->id, score(ID, si->id)));
 		}
-	for(i = 0, ti = listset.begin(); i < 10 && ti != listset.end(); ti++){
+		for(i = 0, ti = listset.begin(); i < 10 && ti != listset.end(); ti++){
 			if(ti->score != 0){
 				if(i == 9 || i == (int)listset.size() - 1){
 					cout << ti->id << endl;

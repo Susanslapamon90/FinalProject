@@ -14,8 +14,8 @@ all:
 
 try:
 	g++ $(CPPFLAGS) $(LO) $(ANOTHER) F2Pmain.cpp -o trying
-Lei:
-	g++ $(CPPFLAGS) $(LO) $(LEINAD) UFPmain.cpp -o leinad
+ump:
+	g++ $(CPPFLAGS) $(LO) $(LEINAD) UFPmain.cpp -o ump
 rm:
 	rm -rf *.cpp~ *.h~ Makefile~
 name:

@@ -483,7 +483,7 @@ void processTransfer(customer* user_now, int& TIME_CNT, UMap &idumap){
 void processFind(customer* user_now, UMap &idumap){
 	string wild_card_ID;
 	cin >> wild_card_ID;
-	FIND(user_now->ID, wild_card_ID, idumap);
+	//FIND(user_now->ID, wild_card_ID, idumap);
 	cout << endl;
 }
 
