@@ -23,6 +23,7 @@ public:
 	}
 };
 
+
 const string strtable = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
 
 int find_or(vector<INDEX<THistory> > &vtr,const INDEX<THistory> &itm){
@@ -50,8 +51,7 @@ void all_digit_change(int h, vector<int> &NC, set<string> &listset2, string &sam
 }
 
 void pick_or_not(int n, int h, vector<int> NC, set<string> &listset2, string sample, int pos){
-	if(n < h && n != 0){
-		
+	if(n < h && n != 0){	
 		return;
 	}else if(n == 0){
 			//cout << "yeah!!!" << endl;
@@ -94,34 +94,72 @@ void clear_exist_ID(set<string> &listset2,Vec &vec){
 			break;
 	}
 }
+void violencescore1(set<string> &listset2,const string &ID){
+	string tmp (ID,0,((ID.size())-1));
+	if(ID.size() > 1)
+		listset2.insert(tmp);
+	tmp += '@';
+	int n = tmp.size() - 1;
+	for(int i = 0; i < 62; i ++){
+		tmp[n] = strtable[i];
+		listset2.insert(tmp);
+	}
+	tmp = ID; tmp += '@';
+	n = tmp.size() - 1;
+	for(int i = 0; i < 62; i ++){
+		tmp[n] = strtable[i];
+		listset2.insert(tmp);
+	}
+		listset2.erase(ID);
+}
+
 
 
 void listing10(bool exist, string ID,Vec &vec){
 	int i;
 	set<TL> listset;
+	vector<TL> listvec;
+	vector<TL>::iterator vi, minpos;
 	set<TL>::iterator ti;
 	if(exist){
-		for(int n = 0; n < 128; n ++){
-			for(int m = 0; m < (int)vec[n].size(); m ++)
-				listset.insert(TL(vec[n][m].id, score(ID, vec[n][m].id)));
+		for(int j = 0; j < 128;j++){
+			for(int k = 0; k < (int)vec[j].size(); k ++)
+			listvec.push_back(TL(vec[j][k].id, score(ID, vec[j][k].id)));
 		}
-	for(i = 0, ti = listset.begin(); i < 10 && ti != listset.end(); ti++){
-			if(ti->score != 0){
-				if(i == 9 || i == (int)listset.size() - 1){
-					cout << ti->id << endl;
-					break;
-				}
-				else
-					cout << ti->id <<","/*<< ti->score << endl*/;
-				i++;
+		for(i = 0; i < 10 && i < (int)listvec.size(); i++){
+			for(vi = listvec.begin()+i, minpos = vi; vi != listvec.end(); vi++){
+				if(*vi < *minpos)
+					minpos = vi;
 			}
+			swap(listvec[i], *minpos);
 		}
+		for(i = 0; i < 10 && i < (int)listvec.size(); i++){
+			if(i == 0)
+				cout << listvec[i].id;
+			else
+				cout << ',' << listvec[i].id;
+		}
+		cout << endl;
+									
 	}else{
 		set<string> listset2;
 		set<string>::iterator tt;
 		vector<int> needChange;
 		int num_in_set = listset2.size(), lv, n_len, n_var, cnt;
-		for(lv = 1; num_in_set < 10; lv++){
+		violencescore1(listset2,ID);
+		clear_exist_ID(listset2,vec);
+		num_in_set = listset2.size();
+		if(num_in_set >= 10){
+			int i;
+			for(i = 0, tt = listset2.begin(); i < 9; tt++){
+				cout << *tt <<","/*<< ti->score << endl*/;
+				i++;
+			}
+			cout << *tt <<endl;
+			return;
+		}
+			cout << "2 "<<endl;
+		for(lv = 2; num_in_set < 10; lv++){
 			/* shorten length */
 			for(n_len = 1, cnt = 1; n_len <= lv; cnt++, n_len+=cnt){
 				n_var = lv - n_len;
@@ -340,7 +378,7 @@ void processLogin(Vec& vec,customer** user_now){
 	int num = int(ID[0]);
 	int tmp = find_or(vec[num], id_tmp);
 	if(tmp < 0)
-		cout <<"ID "<< ID <<" not found"<< endl;
+		 <<"ID "<< ID <<" not found"<< endl;
 	else if(! vec[num][tmp].cu_ptr -> authenticated(PW))
 		cout <<"wrong password"<< endl;
 	else {
@@ -440,7 +478,7 @@ void processTransfer(customer* user_now, int& TIME_CNT, Vec &vec){
 	int tmp = find_or(vec[Num],id_tmp);
 	if(tmp < 0){
 		cout <<"ID "<< ID <<" not found, ";
-		listing10(true, ID, vec);
+//		listing10(true, ID, vec);
 	}else if(num > user_now->dollars()){
 		cout <<"fail, "<< X <<" dollars only in current account"<< endl;
 	}else{
