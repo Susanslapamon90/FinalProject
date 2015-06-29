@@ -55,7 +55,7 @@ public:
 		if(current -> data == NULL){
 			current -> data = &new_data;
 			return true;
-		}
+		 }
 			return false;
 	}
 	bool erase(const string &str){
