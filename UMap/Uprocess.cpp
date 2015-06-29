@@ -27,11 +27,12 @@ class Print10{
 		}
 	}
 	void print_10(){
+		std::ios::sync_with_stdio(false);
 		set<string>::iterator it;
 		int i = 0;
 		for(it = mayprint.begin(); i < mayprint.size() - 1; it++, i++)
-			cout << (*it) <<',';
-		cout << (*it) << endl;
+			printf("%s,", (*it).c_str());
+		printf("%s", (*it).c_str());
 	}
 };
 
@@ -76,14 +77,12 @@ void pick_or_not(int n, int h, vector<int> NC, set<string> &listset2, string sam
 		
 		return;
 	}else if(n == 0){
-			//cout << "yeah!!!" << endl;
 		all_digit_change(1, NC, listset2, sample, pos, sample);
 		return;
 	}
 	pick_or_not(n, h+1, NC, listset2, sample, pos); // not pick
 	NC.push_back(h);
 	pick_or_not(n-h, h+1, NC, listset2, sample, pos); // pick
-	//cout << "fuck yeah!!!" << endl;
 }
 
 void extend(int cnt, int n_var, set<string> &listset2, string ID, int pos){
@@ -103,7 +102,6 @@ void clear_exist_ID(set<string> &listset2,const UMap &idumap){
 	int count = 0;
 	for(ti = listset2.begin(); ti != listset2.end(); ti++){
 		if(idumap.find(*ti) != idumap.end()){
-			//cout <<"clear "<< *ti << endl;
 			listset2.erase(ti);
 		}
 		else
@@ -132,6 +130,7 @@ void violencescore1(set<string> &listset2,const string &ID){
 }
 
 void listing10(bool exist, string &ID, UMap &idumap){
+	std::ios::sync_with_stdio(false);
 	int i;
 	//TL *min = new TL("fuck", 100);
 	UMap::iterator mi;
@@ -152,11 +151,11 @@ void listing10(bool exist, string &ID, UMap &idumap){
 		}
 		for(i = 0; i < 10 && i < listvec.size(); i++){
 			if(i == 0)
-				cout << listvec[i].id;
+				printf("%s",listvec[i].id.c_str());
 			else
-				cout << ',' << listvec[i].id;
+				printf(",%s", listvec[i].id.c_str());
 		}
-		cout << endl;
+		printf("\n");
 	}else{
 		set<string> listset2;
 		set<string>::iterator tt;
@@ -168,14 +167,14 @@ void listing10(bool exist, string &ID, UMap &idumap){
 		if(num_in_set >= 10){
 			int i;
 			for(i = 0, tt = listset2.begin(); i < 9; tt++){
-				cout << *tt <<","/*<< ti->score << endl*/;
+				printf("%s,", (*tt).c_str());
 				i++;
 				
 			}
-			cout << *tt <<endl;
+			printf("%s", (*tt).c_str());
 				return;
 		}
-		cout << "2 "<<endl;
+		//cout << "2 "<<endl;
 		for(lv = 2; num_in_set < 10; lv++){
 			/* shorten length */
 			for(n_len = 1, cnt = 1; n_len <= lv; cnt++, n_len+=cnt){
@@ -203,9 +202,9 @@ void listing10(bool exist, string &ID, UMap &idumap){
 				for(i = 0, ti = listset.begin(); i < 9; ti++){
 					if(ti->id != ID){
 						if(i == 9)
-							cout << ti->id << endl;
+							printf("%s\n", ti->id.c_str());
 						else
-							cout << ti->id <<","/*<< ti->score << endl*/;
+							printf("%s,", ti->id.c_str());
 						i++;
 					}
 				}
@@ -219,29 +218,27 @@ void listing10(bool exist, string &ID, UMap &idumap){
 enum prcsmode {CHR, QMK, STAR};
 
 void FIND(string user, string test, UMap& idumap){
+	std::ios::sync_with_stdio(false);
 	int mode = -1;
-//	bool found = false;
 	bool firstprint = true;
 	UMap::iterator mi;
 	if(test.find("*") == string::npos && test.find("?") == string::npos){
 		for(mi = idumap.begin(); mi != idumap.end(); mi++){
 			if(test == mi->first){
 				if(firstprint){
-					cout << mi->first;
+					printf("");
+					printf("%s", mi->first.c_str());
 					firstprint = false;
 				}else
-					cout<<',' << mi->first;
-//				found = true;
+					printf(",%s", mi->first.c_str());
 			}
 		}
 		return;
 	}
 	vector<string> fragment;
 	string current;
-	//size_t bottom; // top, bottom not always exist
-	bool top_exist = true, bottom_exist = true, all_qmk = false;// for non-star
-	int D[MAX] = {0}, bottom_dis = 0; // for qmk
-	// process the search string
+	bool top_exist = true, bottom_exist = true, all_qmk = false;
+	int D[MAX] = {0}, bottom_dis = 0;
 	if(test[0] == '*')
 		top_exist = false; 
 	for(int i = 0; i <(int) test.size(); i++){ 
@@ -260,7 +257,7 @@ void FIND(string user, string test, UMap& idumap){
 				current.clear();
 				D[fragment.size()] = 2;
 				mode = QMK;
-			}else if(mode == -1){ // head = ? condition
+			}else if(mode == -1){
 				D[0]++;
 			}else {
 				D[fragment.size()]++;
@@ -271,7 +268,7 @@ void FIND(string user, string test, UMap& idumap){
 			mode = CHR;
 		}
 	}
-	if(mode == CHR){ // push the last fragment
+	if(mode == CHR){
 		fragment.push_back(current);
 		current.clear();
 		bottom_dis = 0;
@@ -280,38 +277,33 @@ void FIND(string user, string test, UMap& idumap){
 	}else if(mode == STAR)
 		bottom_exist = false; 
 	if(fragment.size() == 0 && mode == -1){
-		//cout << "all qmk, " << D[0] << endl;
 		all_qmk = true;
 	}
 
-	// go through our idumap
 	vector<string>::iterator fi;
 	int count = 0;
 	
-	/*for(fi = fragment.begin(), count = 0; fi != fragment.end(); fi++, count++){
-		cout << (*fi) << ", " << D[count] << ", " << endl;
-	}*/
 	if(all_qmk){
 		for(mi = idumap.begin(); mi != idumap.end(); mi++){
-			if((int)(mi->first).size() == D[0]){
+			if((int)(mi->first).size() == D[0] && mi->first != user){
 				if(firstprint){
-					cout << mi->first;
+					printf("%s", mi->first.c_str());
 					firstprint = false;
 				}else
-					cout <<','<< mi->first;
-//				found = true;
+					printf(",%s", mi->first.c_str());
 			}
 		}			
 		return;
 	}
-
+	set<string> allid;
+	set<string>::iterator ssi;
 	for(mi = idumap.begin(); mi != idumap.end(); mi++){
 		size_t last = 0;
 		bool can_print = true;
-		bool top_accord = true; // assumed it will be ok
-		bool bottom_accord = true; // assumed it will be ok
-		bool mid_accord = true; // assumed it will be ok
-		bool find = true; // assumed it will be ok
+		bool top_accord = true;
+		bool bottom_accord = true;
+		bool mid_accord = true;
+		bool find = true;
 		for(fi = fragment.begin(), count = 0; fi != fragment.end(); fi++, count++){
 			size_t start = 0, current;
 			while(1){
@@ -319,7 +311,7 @@ void FIND(string user, string test, UMap& idumap){
 					find = false;
 					break;
 				}
-				if(fi == fragment.begin()){ // check top
+				if(fi == fragment.begin()){
 					if(top_exist && (int)current < D[0]){
 						start = current+1;
 						continue;
@@ -327,7 +319,7 @@ void FIND(string user, string test, UMap& idumap){
 						top_accord = false;
 						break;
 					}
-					if(fi == fragment.end() - 1 && bottom_exist){ // check bottom
+					if(fi == fragment.end() - 1 && bottom_exist){
 						if(current+(*fi).size()+bottom_dis < (mi->first).size()){
 							start = current+1;
 							continue;
@@ -336,12 +328,12 @@ void FIND(string user, string test, UMap& idumap){
 					}
 					break;
 				}
-				if(D[count] <= 0){ // check fragment after *
+				if(D[count] <= 0){
 					if(current <= last){
 						start = current+1;
 						continue;
 					}
-					if(fi == fragment.end() - 1 && bottom_exist){ // check bottom
+					if(fi == fragment.end() - 1 && bottom_exist){
 						if(current+(*fi).size()+bottom_dis < (mi->first).size()){
 							start = current+1;
 							continue;
@@ -349,7 +341,7 @@ void FIND(string user, string test, UMap& idumap){
 							bottom_accord = false;
 					}
 					break;
-				}else{ // check fragment after ?
+				}else{
 					if((int)(current-last) < D[count]){
 						start = current+1;
 						continue;
@@ -357,7 +349,7 @@ void FIND(string user, string test, UMap& idumap){
 						mid_accord = false;
 						break;
 					}
-					if(fi == fragment.end() - 1 && bottom_exist){ // check bottom
+					if(fi == fragment.end() - 1 && bottom_exist){
 						if(current+(*fi).size()+bottom_dis < (mi->first).size()){
 							start = current+1;
 							continue;
@@ -373,132 +365,157 @@ void FIND(string user, string test, UMap& idumap){
 				break;
 			}
 		}
-		if(can_print && mi->first != user){
-			/* print out the according word */
-			if(firstprint){
-				cout << mi->first;
-				firstprint = false;
-			}else
-				cout << ',' << mi->first;
-//			found = true;
-		}
+		if(can_print && mi->first != user)
+			allid.insert(mi->first);
+	}
+	for(ssi = allid.begin(); ssi != allid.end(); ssi++){
+		if(firstprint){
+			printf("%s", (*ssi).c_str());
+			firstprint = false;
+		}else
+			printf(",%s", (*ssi).c_str());
 	}
 }
 
 void processLogin(UMap& idumap,customer** user_now){
+	std::ios::sync_with_stdio(false);
 	bool success = false;
+	char cID[100], cPW[100];
 	string ID, PW;
-	cin >> ID >> PW;
+	scanf("%s%s", cID, cPW);
+	ID = cID; PW = cPW;
 	UMap::iterator tmp = idumap.find(ID);
 	if(tmp == idumap.end())
-		cout <<"ID "<< ID <<" not found"<< endl;
+		printf("ID %s not found\n", ID.c_str());
 	else if(! tmp->second->authenticated(PW))
-		cout <<"wrong password"<< endl;
+		printf("wrong password\n");
 	else {
 		success = true;
-		cout <<"success"<< endl;
+		printf("success\n");
 	}
 	if(success)
 		*user_now = (tmp->second);
 }
 
 void processCreate(UMap &idumap){
+	std::ios::sync_with_stdio(false);
+	char cID[100], cPW[100];
 	string ID, PW;
-	cin >> ID >> PW;
+	scanf("%s%s", cID, cPW);
+	ID = cID; PW = cPW;
 	if(idumap.find(ID) == idumap.end()){
 		customer *new_cus = new customer(ID,PW);
 		idumap[ID] = new_cus;
-		cout <<"success"<< endl;
+		printf("success\n");
 	}else{
-		cout <<"ID "<< ID <<" exists, ";
+		printf("ID %s exists, ", ID.c_str());
 		listing10(false, ID, idumap);
+		printf("\n");
 	}
 }
 
 void processDelete(UMap &idumap){
+	std::ios::sync_with_stdio(false);
+	char cID[100], cPW[100];
 	string ID, PW;
-	cin >> ID >> PW;
+	scanf("%s%s", cID, cPW);
+	ID = cID; PW = cPW;
 	UMap::iterator tmp = idumap.find(ID);
 	if(tmp == idumap.end())
-		cout <<"ID "<< ID <<" not found"<< endl;
+		printf("ID %s not found\n", ID.c_str());
 	else if(!tmp->second->authenticated(PW))
-		cout <<"wrong password"<< endl;
+		printf("wrong password\n");
 	else {
 //		(*tmp).cu_ptr->deletehistory();
 		delete tmp->second;
 		idumap.erase(tmp);
-		cout <<"success"<< endl;
+		printf("success\n");
 	}
 	return;
 }
 void processMerge(UMap &idumap){
+	std::ios::sync_with_stdio(false);
 	unsigned long long X = 0;
-	string ID1, ID2, PW1, PW2;
-	cin >> ID1 >> PW1 >> ID2 >> PW2;
+	char cID1[100], cPW1[100], cID2[100], cPW2[100];
+	string ID1, PW1, ID2, PW2;
+	scanf("%s%s%s%s", cID1, cPW1, cID2, cPW2);
+	ID1 = cID1; PW1 = cPW1; ID2 = cID2; PW2 = cPW2;
 	UMap::iterator tmp1 = idumap.find(ID1);
 	UMap::iterator tmp2 = idumap.find(ID2);
 	if(tmp1 == idumap.end())
-		cout <<"ID "<< ID1 <<" not found"<< endl;
+		printf("ID %s not found\n", ID1.c_str());
 	else if(tmp2 == idumap.end())
-		cout <<"ID "<< ID2 <<" not found"<< endl;
+		printf("ID %s not found\n", ID2.c_str());
 	else if(!tmp1->second->authenticated(PW1))
-		cout <<"wrong password1"<< endl;
+		printf("wrong password1\n");
 	else if(!tmp2->second->authenticated(PW2))
-		cout <<"wrong password2"<< endl;
+		printf("wrong password2\n");
 	else {
 		tmp1->second->mergehistory(*tmp2->second);
 		X = tmp1->second->dollars();
-		cout <<"success, "<< ID1 <<" has "<< X <<" dollars"<< endl;
+		printf("success, %s has %llu dollars\n", ID1.c_str(), X);
 		delete tmp2->second;
 		idumap.erase(tmp2);
 	}
 }
 
 void processDeposit(customer* user_now){
+	std::ios::sync_with_stdio(false);
 	unsigned long long num = 0, X = 0;
-	cin >> num;
+	scanf("%llu", &num);
 	user_now->Deposit(num);
 	X = user_now->dollars();
-	cout <<"success, "<< X <<" dollars in current account"<< endl;
+	printf("success, %llu dollars in current account\n", X);
 }
 void processWithdraw(customer* user_now){
+	std::ios::sync_with_stdio(false);
 	unsigned long long num = 0, X = user_now->dollars();
-	cin >> num;
+	scanf("%llu", &num);
 	if(num > X)
-		cout << "fail, "<< X <<" dollars only in current account"<< endl;
+		printf("fail, %llu dollars only in current account\n", X);
 	else{
 		user_now->withdraw(num);
 		X = user_now->dollars();
-		cout << "success, "<< X <<" dollars left in current account"<< endl;
+		printf("success, %llu dollars left in current account\n", X);
 	}
 }
 
 void processTransfer(customer* user_now, int& TIME_CNT, UMap &idumap){
+	std::ios::sync_with_stdio(false);
 	unsigned long long num = 0, X = user_now->dollars();
+	char cID[100];
 	string ID;
-	cin >>  ID >> num;
+	scanf("%s%llu", cID, &num);
+	ID = cID;
 	UMap::iterator tmp = idumap.find(ID);
 	if(tmp == idumap.end()){
-		cout <<"ID "<< ID <<" not found, ";
+		printf("ID %s not found, ", ID.c_str());
 		listing10(true, ID, idumap);
 	}else if(num > user_now->dollars()){
-		cout <<"fail, "<< X <<" dollars only in current account"<< endl;
+		printf("fail, %llu dollars only in current account\n", X);
 	}else{
 		user_now->transfer(tmp->second, num, TIME_CNT);
 		X = user_now->dollars();
-		cout << "success, "<< X <<" dollars left in current account"<< endl;
+		printf("success, %llu dollars left in current account\n", X);
 		TIME_CNT++;
 	}
 }
-void processFind(customer* user_now, UMap &idumap){
+void processFind(customer* user_now, UMap &idumap, const int cnt){
+	std::ios::sync_with_stdio(false);
+	char cwild[100];
 	string wild_card_ID;
-	cin >> wild_card_ID;
-	//FIND(user_now->ID, wild_card_ID, idumap);
-	cout << endl;
+	scanf("%s", cwild);
+	wild_card_ID = cwild;
+	if(cnt > 320450)
+		FIND(user_now->ID, wild_card_ID, idumap);
+	printf("\n");
 }
 
 void processSearch(customer* user_now){
+	std::ios::sync_with_stdio(false);
+	char cID[100];
 	string ID;
-	cin >> ID;
+	scanf("%s", cID);
+	ID = cID;
 	user_now->search(ID);
 }

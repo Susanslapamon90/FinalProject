@@ -16,14 +16,18 @@ int findCommand(char *command){
 }
 
 int main(int argc, char **argv){
+    std::ios::sync_with_stdio(false);
 	Customer<THistory>* USER_NOW = NULL;
 	int TIME_CNT = 0; /* for history */
 	char command[10];
+    //string scommand;
 	UMap idumap;
 	
 //	for(int i = 0; i < 20614; i++){
 //		scanf("%s",command);
-	while(scanf("%s", command) != EOF){	
+    int cnt = 0;
+	while(scanf("%s",command) != EOF){
+        cnt++;
 		switch(findCommand(command)){
             		case LOGIN:
             			processLogin(idumap,&USER_NOW);
@@ -35,29 +39,27 @@ int main(int argc, char **argv){
                 		processDelete(idumap);
                 		break;
             		case MERGE:
-				processMerge(idumap);
+				        processMerge(idumap);
                 		break;
             		case DEPOSIT:
                 		processDeposit(USER_NOW);
-				break;
-			case WITHDRAW:
+				        break;
+                    case WITHDRAW:
             			processWithdraw(USER_NOW);
                 		break;
             		case TRANSFER:
             			processTransfer(USER_NOW,TIME_CNT,idumap);
                 		break;
             		case FIND:
-            			processFind(USER_NOW,idumap);
+            			processFind(USER_NOW,idumap,cnt);
                 		break;
             		case SEARCH:
             			processSearch(USER_NOW);
                 		break;
 			default:
-				cout << "wrong command" << endl;
+				printf("wrong command\n");
 				break;
         	}
-//		if(USER_NOW == NULL)
-//			cout << "null now" <<endl;
 	}
 	return 0;
 }

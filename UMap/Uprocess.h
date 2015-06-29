@@ -15,5 +15,5 @@ void processMerge(UMap &idumap);
 void processDeposit(customer* user_now);
 void processWithdraw(customer* user_now);
 void processTransfer(customer* user_now, int &TIME_CNT, UMap &idumap);
-void processFind(customer* user_now, UMap &idumap);
+void processFind(customer* user_now, UMap &idumap, const int cnt);
 void processSearch(customer* user_now);
