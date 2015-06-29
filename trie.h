@@ -1,5 +1,6 @@
 #include <iostream>
 #include <string>
+#include <set>
 using namespace std;
 
 template<class Data>
@@ -7,6 +8,7 @@ class trie{
 public:
 	trie *parent;
 	trie *child[128];
+	set<int> has_child;
 	Data* data;
 	trie(){
 		data = NULL;
@@ -47,6 +49,7 @@ public:
 			}
 			else{
 				current -> child[int(str[i])] = new trie;
+				(current -> has_child).insert(int(str[i]));
 				ex = current;
 				current = current -> child[int(str[i])];
 				current -> parent = ex;

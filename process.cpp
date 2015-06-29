@@ -103,8 +103,8 @@ void traversal(set<TL> &listset,Trie *idtrie,string & ID){
 		return;
 	if(idtrie -> data != NULL)
 		listset.insert(TL(idtrie -> data -> id,score(ID,idtrie -> data -> id)));
-	for(int i = 0; i < 128;i++)
-		traversal(listset,idtrie -> child[i],ID);
+	for(set<int>::iterator i = (idtrie) -> has_child.begin(); i!= (idtrie) -> has_child.end() ;i++)
+		traversal(listset,idtrie -> child[*i],ID);
 }
 
 
@@ -456,7 +456,7 @@ void processTransfer(customer* user_now, int& TIME_CNT, Trie &idtrie){
 	Trie *tmp = idtrie.find(ID);
 	if(tmp == NULL){
 		cout <<"ID "<< ID <<" not found, ";
-		listing10(true, ID, idtrie);
+	//	listing10(true, ID, idtrie);
 	}else if(num > user_now->dollars()){
 		cout <<"fail, "<< X <<" dollars only in current account"<< endl;
 	}else{
