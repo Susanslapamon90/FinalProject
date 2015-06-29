@@ -37,7 +37,7 @@ public:
 			current -> has_data = true;
 			current -> data = &new_data;
 			return true;
-		}
+		 }
 			return false;
 	}
 	trie* find(const string &str){
