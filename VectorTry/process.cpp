@@ -122,17 +122,26 @@ void listing10(bool exist, string ID,Vec &vec){
 	vector<TL>::iterator vi, minpos;
 	set<TL>::iterator ti;
 	if(exist){
-		for(int j = 0; j < 128;j++){
+		for(int j = 47; j < 123;j++){
 			for(int k = 0; k <(int) vec[j].size(); k ++)
 			listvec.push_back(TL(vec[j][k].id, score(ID, vec[j][k].id)));
+			if(listvec.size() > 10){
+				int max = 0;
+				for(int i = 0; i < 11; i++)
+					if(listvec[max] < listvec[i])
+						max = i;
+				swap(listvec[max],listvec[10]);
+				listvec.pop_back();
+			}
 		}
-		for(i = 0; i < 10 && i < (int)listvec.size(); i++){
+		sort(listvec.begin(),listvec.end());
+		/*for(i = 0; i < 10 && i < (int)listvec.size(); i++){
 			for(vi = listvec.begin()+i, minpos = vi; vi != listvec.end(); vi++){
 				if(*vi < *minpos)
 					minpos = vi;
 			}
 			swap(listvec[i], *minpos);
-		}
+		}*/
 		for(i = 0; i < 10 && i < (int)listvec.size(); i++){
 			if(i == 0)
 				printf("%s",(listvec[i].id).c_str());
