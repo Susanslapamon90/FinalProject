@@ -1,5 +1,5 @@
 CPPFLAGS = -std=c++11  -O2 -Wall
-LO = md5.cpp history2.cpp
+LO = md5.cpp history3.cpp
 OTHER = process.cpp
 ANOTHER = 2process.cpp
 GENERATE = num_small_big.cpp

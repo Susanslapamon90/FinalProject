@@ -19,11 +19,10 @@ int main(int argc, char **argv){
 	Customer<THistory>* USER_NOW = NULL;
 	int TIME_CNT = 0; /* for history */
 	char command[10];
-	array<vector<INDEX<THistory> >, 128> idvec;	
-	
+	array<vector<INDEX<THistory> >, 128> idvec;		
 //	for(int i = 0; i < 20614; i++){
 //		scanf("%s",command);
-	while(scanf("%s", command) != EOF){	
+	while(scanf("%s", command) != EOF){
 		switch(findCommand(command)){
             		case LOGIN:
             			processLogin(idvec,&USER_NOW);

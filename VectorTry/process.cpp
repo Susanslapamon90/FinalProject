@@ -123,7 +123,7 @@ void listing10(bool exist, string ID,Vec &vec){
 	set<TL>::iterator ti;
 	if(exist){
 		for(int j = 0; j < 128;j++){
-			for(int k = 0; k < (int)vec[j].size(); k ++)
+			for(int k = 0; k <(int) vec[j].size(); k ++)
 			listvec.push_back(TL(vec[j][k].id, score(ID, vec[j][k].id)));
 		}
 		for(i = 0; i < 10 && i < (int)listvec.size(); i++){
@@ -135,11 +135,11 @@ void listing10(bool exist, string ID,Vec &vec){
 		}
 		for(i = 0; i < 10 && i < (int)listvec.size(); i++){
 			if(i == 0)
-				cout << listvec[i].id;
+				printf("%s",(listvec[i].id).c_str());
 			else
-				cout << ',' << listvec[i].id;
+				printf(",%s",(listvec[i].id).c_str());
 		}
-		cout << endl;
+		printf("\n");
 									
 	}else{
 		set<string> listset2;
@@ -152,13 +152,13 @@ void listing10(bool exist, string ID,Vec &vec){
 		if(num_in_set >= 10){
 			int i;
 			for(i = 0, tt = listset2.begin(); i < 9; tt++){
-				cout << *tt <<","/*<< ti->score << endl*/;
+				printf("%s,", (*tt).c_str());
 				i++;
 			}
-			cout << *tt <<endl;
+			printf("%s\n", (*tt).c_str());
 			return;
 		}
-			cout << "2 "<<endl;
+			
 		for(lv = 2; num_in_set < 10; lv++){
 			/* shorten length */
 			for(n_len = 1, cnt = 1; n_len <= lv; cnt++, n_len+=cnt){
@@ -372,78 +372,84 @@ enum prcsmode {CHR, QMK, STAR};
 */
 void processLogin(Vec& vec,customer** user_now){
 	bool success = false;
-	string ID, PW;
-	cin >> ID >> PW;
+	char cID[105],cPW[105];
+	scanf("%s%s",cID,cPW);
+	string ID(cID), PW(cPW);
 	INDEX<THistory> id_tmp(ID,cus_temp);
 	int num = int(ID[0]);
 	int tmp = find_or(vec[num], id_tmp);
 	if(tmp < 0)
-		 <<"ID "<< ID <<" not found"<< endl;
+		printf("ID %s not found\n",ID.c_str());
 	else if(! vec[num][tmp].cu_ptr -> authenticated(PW))
-		cout <<"wrong password"<< endl;
+		printf("wrong password\n");
 	else {
 		success = true;
-		cout <<"success"<< endl;
+		printf("success\n");
 	}
 	if(success)
 		*user_now = (vec[num][tmp].cu_ptr);
 }
 
 void processCreate(Vec &vec){
-	string ID, PW;
-	cin >> ID >> PW;
+
+	char cID[105],cPW[105];
+	scanf("%s%s",cID,cPW);
+	string ID(cID), PW(cPW);
+
 	INDEX<THistory> id_tmp(ID,cus_temp);
 	int num = int(ID[0]);
 	int tmp = find_or(vec[num],id_tmp);
 	if(tmp < 0){
 		INDEX<THistory> new_index(ID,PW);
 		vec[num].push_back(new_index);
-		cout <<"success"<< endl;
+		printf("success\n");
 	}else{
-		cout <<"ID "<< ID <<" exists, ";
+		printf("ID %s exists, ",ID.c_str());
 		listing10(false, ID, vec);
 	}
 }
 
 void processDelete(Vec &vec){
-	string ID, PW;
-	cin >> ID >> PW;
+	char cID[105],cPW[105];
+	scanf("%s%s",cID,cPW);
+	string ID(cID), PW(cPW);
 	INDEX<THistory> id_temp(ID,cus_temp);
 	int num = int(ID[0]);
 	int tmp = find_or(vec[num],id_temp);
 	if(tmp < 0)
-		cout <<"ID "<< ID <<" not found"<< endl;
+		printf("ID %s not found\n",ID.c_str());
 	else if(!vec[num][tmp].cu_ptr -> authenticated(PW))
-		cout <<"wrong password"<< endl;
+		printf("wrong password\n");
 	else {
 //		(*tmp).cu_ptr->deletehistory();
 		delete vec[num][tmp].cu_ptr;
 		swap(vec[num][tmp], vec[num][vec[num].size() - 1] ) ;
 		vec[num].pop_back();
-		cout <<"success"<< endl;
+		printf("success\n");
 	}
 	return;
 }
 void processMerge(Vec &vec){
 	unsigned long long X = 0;
-	string ID1, ID2, PW1, PW2;
-	cin >> ID1 >> PW1 >> ID2 >> PW2;
+	char cID1[105],cID2[105],cPW1[105],cPW2[105];
+	scanf("%s%s%s%s",cID1,cPW1,cID2,cPW2);
+	string ID1(cID1), PW1(cPW1), ID2(cID2),PW2(cPW2);
 	int num1 = int (ID1[0]), num2 = int(ID2[0]);
 	INDEX<THistory> id_tmp1(ID1,cus_temp),id_tmp2(ID2,cus_temp);
 	int tmp1 = find_or(vec[num1],id_tmp1);
 	int tmp2 = find_or(vec[num2],id_tmp2);
 	if(tmp1 < 0)
-		cout <<"ID "<< ID1 <<" not found"<< endl;
-	else if(tmp2 < 0)
-		cout <<"ID "<< ID2 <<" not found"<< endl;
+		printf("ID %s not found\n",ID1.c_str());
+	else if(tmp2 < 0)	
+		printf("ID %s not found\n",ID2.c_str());
 	else if(!vec[num1][tmp1].cu_ptr -> authenticated(PW1))
-		cout <<"wrong password1"<< endl;
+		printf("wrong password1\n");
 	else if(!vec[num2][tmp2].cu_ptr -> authenticated(PW2))
-		cout <<"wrong password2"<< endl;
+		printf("wrong password2\n");
 	else {
 		vec[num1][tmp1].cu_ptr->mergehistory(*(vec[num2][tmp2].cu_ptr));
 		X = vec[num1][tmp1].cu_ptr->dollars();
-		cout <<"success, "<< ID1 <<" has "<< X <<" dollars"<< endl;
+		printf("success, %s has %llu dollars\n",ID1.c_str(),X);
 		delete vec[num2][tmp2].cu_ptr;
 		swap(vec[num2][tmp2], vec[num2][vec[num2].size() - 1] ) ;
 		vec[num2].pop_back();
@@ -452,51 +458,54 @@ void processMerge(Vec &vec){
 
 void processDeposit(customer* user_now){
 	unsigned long long num = 0, X = 0;
-	cin >> num;
+	scanf("%llu",&num);
 	user_now->Deposit(num);
 	X = user_now->dollars();
-	cout <<"success, "<< X <<" dollars in current account"<< endl;
+	printf("success, %llu dollars in current account\n",X);
 }
 void processWithdraw(customer* user_now){
 	unsigned long long num = 0, X = user_now->dollars();
-	cin >> num;
+	scanf("%llu",&num);
 	if(num > X)
-		cout << "fail, "<< X <<" dollars only in current account"<< endl;
+		printf( "fail, %llu dollars only in current account\n",X);
 	else{
 		user_now->withdraw(num);
 		X = user_now->dollars();
-		cout << "success, "<< X <<" dollars left in current account"<< endl;
+		printf( "success, %llu dollars left in current account\n",X);
 	}
 }
 
 void processTransfer(customer* user_now, int& TIME_CNT, Vec &vec){
 	unsigned long long num = 0, X = user_now->dollars();
-	string ID;
-	cin >>  ID >> num;
+	char cID[105];
+	scanf("%s%llu",cID,&num);
+	string ID(cID);
 	INDEX<THistory> id_tmp(ID,cus_temp);
 	int Num = int(ID[0]);
 	int tmp = find_or(vec[Num],id_tmp);
 	if(tmp < 0){
-		cout <<"ID "<< ID <<" not found, ";
-//		listing10(true, ID, vec);
+		printf("ID %s not found, ",ID.c_str());
+		listing10(true, ID, vec);
 	}else if(num > user_now->dollars()){
-		cout <<"fail, "<< X <<" dollars only in current account"<< endl;
+		printf( "fail, %llu dollars only in current account\n",X);
 	}else{
 		user_now->transfer(vec[Num][tmp].cu_ptr, num, TIME_CNT);
 		X = user_now->dollars();
-		cout << "success, "<< X <<" dollars left in current account"<< endl;
+		printf( "success, %llu dollars left in current account\n",X);
 		TIME_CNT++;
 	}
 }
 void processFind(customer* user_now, Vec &vec){
-	string wild_card_ID;
-	cin >> wild_card_ID;
+	char cID[105];
+	scanf("%s",cID);
+	string wild_card_ID(cID);
 //	FIND(user_now->ID, wild_card_ID, vec);
-	cout << endl;
+	printf("\n");
 }
 
 void processSearch(customer* user_now, Vec &vec){
-	string ID;
-	cin >> ID;
+	char cID[105];
+	scanf("%s",cID);
+	string ID(cID);
 	user_now->search(ID);
 }
