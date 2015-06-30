@@ -94,28 +94,48 @@ void clear_exist_ID(set<string> &listset2,Vec &vec){
 			break;
 	}
 }
-void violencescore1(set<string> &listset2,const string &ID){
+void clear_exist_ID2(vector<string> &listvec2,Vec &vec){
+	int i = 0;
+	vector<string>::iterator vi, minpos;
+	for(i = 0; i < 10 && i < (int)listvec2.size(); i++){
+		for(vi = listvec2.begin()+i, minpos = vi; vi != listvec2.end(); vi++){
+			if(*vi < *minpos)
+				minpos = vi;
+		}
+		bool toswap = true;
+		for(int j = 0; j <(int) vec[int((*minpos)[0])].size(); j++)
+			if(vec[int((*minpos)[0])][j].id == *minpos ){
+				toswap = false;
+				swap(*minpos,listvec2[listvec2.size() - 1]);
+				listvec2.pop_back();
+				i --;
+				break;
+			}
+		if(toswap)
+			swap(listvec2[i], *minpos);
+	}	
+}
+void violencescore1(vector<string> &listvec2,const string &ID){
 	string tmp (ID,0,((ID.size())-1));
 	if(ID.size() > 1)
-		listset2.insert(tmp);
+		listvec2.push_back(tmp);
 	tmp += '@';
 	int n = tmp.size() - 1;
 	for(int i = 0; i < 62; i ++){
 		tmp[n] = strtable[i];
-		listset2.insert(tmp);
+		listvec2.push_back(tmp);
 	}
 	tmp = ID; tmp += '@';
 	n = tmp.size() - 1;
 	for(int i = 0; i < 62; i ++){
 		tmp[n] = strtable[i];
-		listset2.insert(tmp);
+		listvec2.push_back(tmp);
 	}
-		listset2.erase(ID);
 }
 
 
 
-void listing10(bool exist, string ID,Vec &vec){
+void listing10(bool exist,const string &ID,Vec &vec){
 	int i;
 	set<TL> listset;
 	vector<TL> listvec;
@@ -125,23 +145,14 @@ void listing10(bool exist, string ID,Vec &vec){
 		for(int j = 47; j < 123;j++){
 			for(int k = 0; k <(int) vec[j].size(); k ++)
 			listvec.push_back(TL(vec[j][k].id, score(ID, vec[j][k].id)));
-			if(listvec.size() > 10){
-				int max = 0;
-				for(int i = 0; i < 11; i++)
-					if(listvec[max] < listvec[i])
-						max = i;
-				swap(listvec[max],listvec[10]);
-				listvec.pop_back();
-			}
 		}
-		sort(listvec.begin(),listvec.end());
-		/*for(i = 0; i < 10 && i < (int)listvec.size(); i++){
+		for(i = 0; i < 10 && i < (int)listvec.size(); i++){
 			for(vi = listvec.begin()+i, minpos = vi; vi != listvec.end(); vi++){
 				if(*vi < *minpos)
 					minpos = vi;
 			}
 			swap(listvec[i], *minpos);
-		}*/
+		}
 		for(i = 0; i < 10 && i < (int)listvec.size(); i++){
 			if(i == 0)
 				printf("%s",(listvec[i].id).c_str());
@@ -151,23 +162,25 @@ void listing10(bool exist, string ID,Vec &vec){
 		printf("\n");
 									
 	}else{
-		set<string> listset2;
+		vector<string> listvec2;
 		set<string>::iterator tt;
+		vector<string>::iterator vvv;
 		vector<int> needChange;
-		int num_in_set = listset2.size(), lv, n_len, n_var, cnt;
-		violencescore1(listset2,ID);
-		clear_exist_ID(listset2,vec);
-		num_in_set = listset2.size();
+		int num_in_set = 0, lv, n_len, n_var, cnt;
+		violencescore1(listvec2,ID);
+		clear_exist_ID2(listvec2,vec);
+		num_in_set = listvec2.size();
 		if(num_in_set >= 10){
 			int i;
-			for(i = 0, tt = listset2.begin(); i < 9; tt++){
-				printf("%s,", (*tt).c_str());
+			for(i = 0, vvv = listvec2.begin(); i < 9; vvv++){
+				printf("%s,", (*vvv).c_str());
 				i++;
 			}
-			printf("%s\n", (*tt).c_str());
+			printf("%s\n", (*vvv).c_str());
 			return;
 		}
-			
+		set<string> listset2(listvec2.begin(),listvec2.end());
+		clear_exist_ID(listset2,vec);
 		for(lv = 2; num_in_set < 10; lv++){
 			/* shorten length */
 			for(n_len = 1, cnt = 1; n_len <= lv; cnt++, n_len+=cnt){
@@ -385,7 +398,7 @@ void processLogin(Vec& vec,customer** user_now){
 	scanf("%s%s",cID,cPW);
 	string ID(cID), PW(cPW);
 	INDEX<THistory> id_tmp(ID,cus_temp);
-	int num = int(ID[0]);
+	int num = int(cID[0]);
 	int tmp = find_or(vec[num], id_tmp);
 	if(tmp < 0)
 		printf("ID %s not found\n",ID.c_str());
@@ -400,13 +413,11 @@ void processLogin(Vec& vec,customer** user_now){
 }
 
 void processCreate(Vec &vec){
-
 	char cID[105],cPW[105];
 	scanf("%s%s",cID,cPW);
 	string ID(cID), PW(cPW);
-
 	INDEX<THistory> id_tmp(ID,cus_temp);
-	int num = int(ID[0]);
+	int num = int(cID[0]);
 	int tmp = find_or(vec[num],id_tmp);
 	if(tmp < 0){
 		INDEX<THistory> new_index(ID,PW);
@@ -423,7 +434,7 @@ void processDelete(Vec &vec){
 	scanf("%s%s",cID,cPW);
 	string ID(cID), PW(cPW);
 	INDEX<THistory> id_temp(ID,cus_temp);
-	int num = int(ID[0]);
+	int num = int(cID[0]);
 	int tmp = find_or(vec[num],id_temp);
 	if(tmp < 0)
 		printf("ID %s not found\n",ID.c_str());
@@ -443,7 +454,7 @@ void processMerge(Vec &vec){
 	char cID1[105],cID2[105],cPW1[105],cPW2[105];
 	scanf("%s%s%s%s",cID1,cPW1,cID2,cPW2);
 	string ID1(cID1), PW1(cPW1), ID2(cID2),PW2(cPW2);
-	int num1 = int (ID1[0]), num2 = int(ID2[0]);
+	int num1 = int (cID1[0]), num2 = int(cID2[0]);
 	INDEX<THistory> id_tmp1(ID1,cus_temp),id_tmp2(ID2,cus_temp);
 	int tmp1 = find_or(vec[num1],id_tmp1);
 	int tmp2 = find_or(vec[num2],id_tmp2);
@@ -490,7 +501,7 @@ void processTransfer(customer* user_now, int& TIME_CNT, Vec &vec){
 	scanf("%s%llu",cID,&num);
 	string ID(cID);
 	INDEX<THistory> id_tmp(ID,cus_temp);
-	int Num = int(ID[0]);
+	int Num = int(cID[0]);
 	int tmp = find_or(vec[Num],id_tmp);
 	if(tmp < 0){
 		printf("ID %s not found, ",ID.c_str());
@@ -512,7 +523,7 @@ void processFind(customer* user_now, Vec &vec){
 	printf("\n");
 }
 
-void processSearch(customer* user_now, Vec &vec){
+void processSearch(customer* user_now){
 	char cID[105];
 	scanf("%s",cID);
 	string ID(cID);

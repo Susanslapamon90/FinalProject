@@ -23,33 +23,33 @@ int main(int argc, char **argv){
 //	for(int i = 0; i < 20614; i++){
 //		scanf("%s",command);
 	while(scanf("%s", command) != EOF){
-		switch(findCommand(command)){
-            		case LOGIN:
+		switch(int (command[3])){
+            		case 105:
             			processLogin(idvec,&USER_NOW);
                 		break;
-            		case CREATE:
+            		case 97:
             			processCreate(idvec);
                 		break;
-            		case DELETE:
+            		case 101:
                 		processDelete(idvec);
                 		break;
-            		case MERGE:
+            		case 103:
 				processMerge(idvec);
                 		break;
-            		case DEPOSIT:
+            		case 111:
                 		processDeposit(USER_NOW);
 				break;
-			case WITHDRAW:
+			case 104:
             			processWithdraw(USER_NOW);
                 		break;
-            		case TRANSFER:
+            		case 110:
             			processTransfer(USER_NOW,TIME_CNT,idvec);
                 		break;
-            		case FIND:
+			case 100:
             			processFind(USER_NOW,idvec);
                 		break;
-            		case SEARCH:
-            			processSearch(USER_NOW,idvec);
+            		case 114:
+            			processSearch(USER_NOW);
                 		break;
 			default:
 				cout << "wrong command" << endl;
