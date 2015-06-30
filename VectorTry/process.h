@@ -1,4 +1,4 @@
-#include "2customer.h"
+#include "customer.h"
 #include "history3.h"
 
 using namespace std;

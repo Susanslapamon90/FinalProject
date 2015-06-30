@@ -223,22 +223,15 @@ void listing10(bool exist,const string &ID,Vec &vec){
 #define MAX 100
 enum prcsmode {CHR, QMK, STAR};
 
-/*void FIND(string user, string test, Set& idset){
+void FIND(string user, string test, Vec& vec,set<string> &output){
 	int mode = -1;
 //	bool found = false;
-	bool firstprint = true;
-	Set::iterator si;
 	if(test.find("*") == string::npos && test.find("?") == string::npos){
-		for(si = idset.begin(); si != idset.end(); si++){
-			if(test == si->id){
-				if(firstprint){
-					cout << si->id;
-					firstprint = false;
-				}else
-					cout<<',' << si->id;
-//				found = true;
-			}
+		for(int i = 0; i < (int)vec[(int(test[0]))].size();i++){
+			if(test == vec[int(test[0])][i].id)
+				output.insert(vec[int(test[0])][i].id);
 		}
+		
 		return;
 	}
 	vector<string> fragment;
@@ -293,26 +286,20 @@ enum prcsmode {CHR, QMK, STAR};
 	// go through our idset
 	vector<string>::iterator fi;
 	int count = 0;
-	
 //	for(fi = fragment.begin(), count = 0; fi != fragment.end(); fi++, count++){
 //		cout << (*fi) << ", " << D[count] << ", " << endl;
 //	}
 	if(all_qmk){
-		for(si = idset.begin(); si != idset.end(); si++){
-			if((int)(si->id).size() == D[0]){
-				if(firstprint){
-					cout << si -> id;
-					firstprint = false;
-				}else
-					cout <<','<< si -> id;
-
-//				found = true;
+		for(int j = 47; j <123; j++){
+			for(int i = 0; i <(int) vec[j].size();i++)
+				if((int)vec[j][i].id.size() == D[0])
+					output.insert(vec[j][i].id);	
 			}
-		}			
 		return;
 	}
-
-	for(si = idset.begin(); si != idset.end(); si++){
+	vector<INDEX<THistory>>::iterator vi;
+	for(int i = 47; i < 123; i++)
+	for(vi = vec[i].begin(); vi != vec[i].end(); vi++){
 		size_t last = 0;
 		bool can_print = true;
 		bool top_accord = true; // assumed it will be ok
@@ -322,7 +309,7 @@ enum prcsmode {CHR, QMK, STAR};
 		for(fi = fragment.begin(), count = 0; fi != fragment.end(); fi++, count++){
 			size_t start = 0, current;
 			while(1){
-				if((current = (si->id).find(*fi, start)) == string::npos){
+				if((current = (vi->id).find(*fi, start)) == string::npos){
 					find = false;
 					break;
 				}
@@ -335,10 +322,10 @@ enum prcsmode {CHR, QMK, STAR};
 						break;
 					}
 					if(fi == fragment.end() - 1 && bottom_exist){ // check bottom
-						if(current+(*fi).size()+bottom_dis < (si->id).size()){
+						if(current+(*fi).size()+bottom_dis < (vi->id).size()){
 							start = current+1;
 							continue;
-						}else if(current+(*fi).size()+bottom_dis > (si->id).size())
+						}else if(current+(*fi).size()+bottom_dis > (vi->id).size())
 							bottom_accord = false;
 					}
 					break;
@@ -349,10 +336,10 @@ enum prcsmode {CHR, QMK, STAR};
 						continue;
 					}
 					if(fi == fragment.end() - 1 && bottom_exist){ // check bottom
-						if(current+(*fi).size()+bottom_dis < (si->id).size()){
+						if(current+(*fi).size()+bottom_dis < (vi->id).size()){
 							start = current+1;
 							continue;
-						}else if(current+(*fi).size()+bottom_dis > (si->id).size())
+						}else if(current+(*fi).size()+bottom_dis > (vi->id).size())
 							bottom_accord = false;
 					}
 					break;
@@ -365,10 +352,10 @@ enum prcsmode {CHR, QMK, STAR};
 						break;
 					}
 					if(fi == fragment.end() - 1 && bottom_exist){ // check bottom
-						if(current+(*fi).size()+bottom_dis < (si->id).size()){
+						if(current+(*fi).size()+bottom_dis < (vi->id).size()){
 							start = current+1;
 							continue;
-						}else if(current+(*fi).size()+bottom_dis > (si->id).size())
+						}else if(current+(*fi).size()+bottom_dis > (vi->id).size())
 							bottom_accord = false;
 					}
 					break;
@@ -380,18 +367,11 @@ enum prcsmode {CHR, QMK, STAR};
 				break;
 			}
 		}
-		if(can_print && si->id != user){
-			// print out the according word 
-			if(firstprint){
-				cout << si -> id;
-				firstprint = false;
-			}else
-				cout << ',' << si -> id;
-//			found = true;
-		}
+		if(can_print && vi->id != user) 
+			output.insert(vi -> id);
 	}
 }
-*/
+
 void processLogin(Vec& vec,customer** user_now){
 	bool success = false;
 	char cID[105],cPW[105];
@@ -519,7 +499,14 @@ void processFind(customer* user_now, Vec &vec){
 	char cID[105];
 	scanf("%s",cID);
 	string wild_card_ID(cID);
-//	FIND(user_now->ID, wild_card_ID, vec);
+	set<string> output;
+	FIND(user_now->ID, wild_card_ID,vec, output);
+	if(output.size() > 0){
+		set<string>::iterator it = output.begin();
+		for(int i = 0; i < (int)output.size() - 1; it++,i ++)
+			printf("%s,",(*it).c_str());
+		printf("%s",(*it).c_str());
+	}
 	printf("\n");
 }
 
