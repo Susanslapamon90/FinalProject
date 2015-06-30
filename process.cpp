@@ -17,6 +17,11 @@ public:
 		else
 			return id < a.id;
 	}
+	TL &operator = (const TL &a){
+		id = a.id;
+		score = a.score;
+		return *this;
+	}
 	TL(string str, int n){
 		id = str;
 		score = n;
@@ -98,13 +103,15 @@ void violencescore1(set<string> &listset2,const string &ID){
 	}
 		listset2.erase(ID);
 }
-void traversal(set<TL> &listset,Trie *idtrie,string & ID){
+void traversal(vector<TL> &listvec,Trie *idtrie,string & ID){
 	if(idtrie == NULL)
 		return;
-	if(idtrie -> data != NULL)
-		listset.insert(TL(idtrie -> data -> id,score(ID,idtrie -> data -> id)));
-	for(int i = 0; i < 128;i++)
-		traversal(listset,idtrie -> child[i],ID);
+	if(idtrie -> data != NULL){
+		TL tmp(idtrie->data->id,score(ID,idtrie -> data -> id));
+		listvec.push_back(tmp);
+	}
+	for(set<int>::iterator i = (idtrie) -> has_child.begin(); i!= (idtrie) -> has_child.end() ;i++)
+		traversal(listvec,idtrie -> child[*i],ID);
 }
 
 
@@ -112,19 +119,24 @@ void listing10(bool exist, string ID,Trie &idtrie){
 	int i;
 	set<TL> listset;
 	set<TL>::iterator tli;
+	vector<TL> listvec;
+	vector<TL>::iterator vi, minpos;
 	if(exist){
-		traversal(listset,&idtrie,ID);
-	for(i = 0, tli = listset.begin(); i < 10 && tli != listset.end(); tli++){
-			if(tli->score != 0){
-				if(i == 9 || i == (int)listset.size() - 1){
-					cout << tli->id << endl;
-					break;
-				}
-				else
-					cout << tli->id <<","/*<< ti->score << endl*/;
-				i++;
+		traversal(listvec,&idtrie,ID);
+		for(i = 0; i < 10 && i <(int) listvec.size(); i++){
+			for(vi = listvec.begin()+i, minpos = vi; vi != listvec.end(); vi++){
+				if(*vi < *minpos)
+					minpos = vi;
 			}
+			swap(listvec[i], *minpos);
 		}
+		for(i = 0; i < 10 && i < (int)listvec.size(); i++){
+			if(i == 0)
+				cout << listvec[i].id;
+			else
+				cout << ',' << listvec[i].id;
+		}
+		cout << endl;
 	}else{
 		set<string> listset2;
 		set<string>::iterator tt;
@@ -456,7 +468,7 @@ void processTransfer(customer* user_now, int& TIME_CNT, Trie &idtrie){
 	Trie *tmp = idtrie.find(ID);
 	if(tmp == NULL){
 		cout <<"ID "<< ID <<" not found, ";
-		//listing10(true, ID, idtrie);
+//		listing10(true, ID, idtrie);
 	}else if(num > user_now->dollars()){
 		cout <<"fail, "<< X <<" dollars only in current account"<< endl;
 	}else{

@@ -72,7 +72,7 @@ public:
 					printf("To ");
 				else
 					printf("From ");
-				cout << (*i)->id;
+				printf("%s",((*i)->id).c_str());
 				printf(" %llu\n", (*i)->money);
 				flag = 1;
 			}

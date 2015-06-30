@@ -1,5 +1,5 @@
 #include "customer.h"
-#include "history2.h"
+#include "history3.h"
 
 using namespace std;
 
@@ -14,5 +14,5 @@ void processDeposit(customer* user_now);
 void processWithdraw(customer* user_now);
 void processTransfer(customer* user_now, int &TIME_CNT, Vec &vec);
 void processFind(customer* user_now, Vec &vec);
-void processSearch(customer* user_now, Vec &vec);
+void processSearch(customer* user_now);
 
